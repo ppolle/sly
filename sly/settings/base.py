@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     #Third party apps
     'bootstrap3',
     #Sly apps
+    'sly.apps.shrink',
 ]
 
 MIDDLEWARE_CLASSES = [
