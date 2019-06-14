@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 
 from django.db import models
 
+
 # Create your models here.
 class SlyUrl(models.Model):
 	'''Model that saves Url info to be shortened'''
@@ -15,4 +16,5 @@ class SlyUrl(models.Model):
 	def decode(self, url):
 		'''change a url back to original url'''
 		pass
+
 

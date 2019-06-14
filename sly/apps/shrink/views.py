@@ -7,7 +7,7 @@ def index(request):
 	'''
 	Method that displays shortens links
 	'''
-	if request == 'POST':
+	if request.method == 'POST':
 		form = UrlForm(request.POST)
 		if form.is_valid():
 			longUrl = form.cleaned_data['url']
