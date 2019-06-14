@@ -11,11 +11,11 @@ def index(request):
 		form = UrlForm(request.POST)
 		if form.is_valid():
 			longUrl = form.cleaned_data['url']
-			url = SlyUrl(url = longUrl)
+			url = SlyUrl(longUrl = longUrl)
 			url.save()
 			
 			url.refresh_from_db()
-			url.short_code = SlyUrl.encode(url.id)
+			url.shortCode = SlyUrl.encode(url.id)
 			url.save()
 			
 			return redirect('index')
