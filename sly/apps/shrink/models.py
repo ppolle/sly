@@ -7,7 +7,7 @@ class SlyUrl(models.Model):
 	'''Model that saves Url info to be shortened'''
 	url = models.CharField(max_length=300)
 	short_code = models.CharField(max_length=50, blank=True)
-	timestamp = models.DateTimeField(auto_now=True)
+	timestamp = models.DateTimeField(auto_now_add=True)
 
 	def __str__(self):
 		return self.url
