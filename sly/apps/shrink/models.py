@@ -12,8 +12,7 @@ class SlyUrl(models.Model):
 	def __str__(self):
 		return self.url
 
-	def encode
-	(self, id):
+	def encode(self, id):
 		'''shorten a url link'''
 		import string
 		characters = string.digits+string.uppercase+string.lowercase
