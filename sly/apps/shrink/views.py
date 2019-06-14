@@ -11,14 +11,15 @@ def index(request):
 		form = UrlForm(request.POST)
 		if form.is_valid():
 			longUrl = form.cleaned_data['url']
-			url = SlyUrl(longUrl = longUrl)
-			url.save()
+			shortCode = form.cleaned_data['short_code']
+
+			if shortCode is None:
+				url = SlyUrl.objects.create(longUrl = longUrl)		
+			else:
+				url = SlyUrl.objects.create(longUrl=longUrl,shortCode=shortCode)
 			
-			url.refresh_from_db()
-			url.shortCode = SlyUrl.encode(url.id)
-			url.save()
-			
-			return redirect('index')
+			return render(request, 'shrink/success.html', {'shortUrl':url.shortCode})
+
 	else:
 		form = UrlForm()
 

@@ -5,7 +5,7 @@
 	Use the form below to shorten your URL<br>
     <div class="panel panel-default">
 	<div class="panel-body">
-		<form method="post">
+		<form method="post" >
 		    {% csrf_token %}
 		    {% for field in  form %}
 		      <p>
@@ -20,7 +20,7 @@
 		        {% endfor %}
 		      </p>
 		    {% endfor %}
-		    <button type="submit" class="btn btn-success btn-block">Sign up</button>
+		    <button type="submit" class="btn btn-success btn-block">Shorten Url</button>
 		</form>
 	</div>
 	</div>
