@@ -12,20 +12,6 @@ class SlyUrl(models.Model):
 	def __str__(self):
 		return self.url
 
-	def encode(self, id):
-		'''shorten a url link'''
-		import string
-		characters = string.digits+string.uppercase+string.lowercase
-		base = len(characters)
-		ret = []
-
-		while id > 0:
-			val = id % base
-			ret.append(charcaters[val])
-			id = id // base
-		
-		return "".join(ret[::-1])
-
 	def decode(self, url):
 		'''change a url back to original url'''
 		pass
