@@ -4,7 +4,7 @@ from django.db import models
 
 # Create your models here.
 class SlyUrl(models.Model):
-	'''Model tat saves Url info to be shortened'''
+	'''Model that saves Url info to be shortened'''
 	url = models.CharField(max_length=300)
 	short_code = models.CharField(max_length=50, blank=True)
 	timestamp = models.DateTimeField(auto_now=True)
