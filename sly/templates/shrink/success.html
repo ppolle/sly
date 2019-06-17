@@ -1,6 +1,17 @@
 {% extends 'base.html' %}
 {% block content %}
-<div>Your shortcode has been succesfully created as shown below</div>
-<P>{{ shortUrl }}</P>
+<div class="row">
+	<div class="col-md-2"></div>
+	<div class="col-md-8">
+		<div>Your shortcode has been succesfully created as shown below:</div>
+		<P><a href="{{ object }}"></a></P>
+		{% for a in all %}
+		<p>{{a.shortCode}} - {{a.longUrl}}</p>
+
+		{%endfor %}
+	</div>
+	<div class="col-md-2"></div>
+</div>
+
 
 {% endblock %}
