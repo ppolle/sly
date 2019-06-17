@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from django.core.urlresolvers import reverse
 
 
 # Create your models here.
@@ -13,8 +14,9 @@ class SlyUrl(models.Model):
 	def __str__(self):
 		return self.url
 
-	def decode(self, url):
-		'''change a url back to original url'''
-		pass
+	def get_short_url(self):
+		'''get the shortcode url'''
+		return reverse('shorturl', kwargs={'shortcode': self.shortCode})
+		
 
 

@@ -25,19 +25,19 @@ class IndexView(View):
 			shortCode = form.cleaned_data['short_code']
 
 			if shortCode == '':
-				created, obj = SlyUrl(longUrl = longUrl)
-				obj.save()
-				obj.refresh_from_db()
-				obj.shortCode = self.generate_shortcode(url.id)
-				obj.save()
+				url = SlyUrl(longUrl = longUrl)
+				url.save()
+				url.refresh_from_db()
+				url.shortCode = self.generate_shortcode(url.id)
+				url.save()
 			else:
-				created, obj = SlyUrl.objects.create(longUrl=longUrl,shortCode=shortCode)
+				created, url = SlyUrl.objects.create(longUrl=longUrl,shortCode=shortCode)
 				
-			if created:
-				template = 'shrink/success.html'
-				context = {
-						'object':obj					
-					}
+			
+			template = 'shrink/success.html'
+			context = {
+					'url':url					
+				}
 
 		return render(request, template, context)
 
@@ -56,6 +56,17 @@ class IndexView(View):
 			id = id // base
 		
 		return "".join(ret[::-1])
+
+class ShortCodeRedirect(View):
+	def get(self, request, shortcode, *args, **kwargs):
+		'''
+		Redirect shortcode to the correct url
+		'''
+	
+		url_path = SlyUrl.objects.get(shortCode=shortcode)
+		return redirect(url_path.longUrl)
+
+
 
 
 
