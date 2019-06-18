@@ -66,10 +66,6 @@ class ShortCodeRedirect(View):
 		url_path = SlyUrl.objects.get(shortCode=shortcode)
 		return redirect(url_path.longUrl)
 
-def test(request, id):
-	url = SlyUrl.objects.get(id=id)
-	return redirect(url.longUrl)
-
 
 
 
