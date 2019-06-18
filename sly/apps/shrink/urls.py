@@ -1,8 +1,8 @@
 from django.conf.urls import url
 
-from .views import IndexView, ShortCodeRedirect
+from .views import IndexView, ShortCodeRedirect, test
 
 urlpatterns = [
 	url(r'^$', IndexView.as_view(), name='index'),
-	url(r'^(?P<shortcode>[\W-]+)/$', ShortCodeRedirect.as_view(), name='shorturl'),     
+	url(r'^(?P<shortcode>[\w-]+)/$', ShortCodeRedirect.as_view(), name='shorturl'),
 ]

@@ -31,7 +31,7 @@ class IndexView(View):
 				url.shortCode = self.generate_shortcode(url.id)
 				url.save()
 			else:
-				created, url = SlyUrl.objects.create(longUrl=longUrl,shortCode=shortCode)
+				url = SlyUrl.objects.create(longUrl=longUrl,shortCode=shortCode)
 				
 			
 			template = 'shrink/success.html'
@@ -65,6 +65,10 @@ class ShortCodeRedirect(View):
 	
 		url_path = SlyUrl.objects.get(shortCode=shortcode)
 		return redirect(url_path.longUrl)
+
+def test(request, id):
+	url = SlyUrl.objects.get(id=id)
+	return redirect(url.longUrl)
 
 
 
