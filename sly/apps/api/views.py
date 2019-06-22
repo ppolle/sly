@@ -6,5 +6,5 @@ class ShortCodeList(generics.ListCreateAPIView):
 	"""
 	Create a shortcode Url or list shortcode urls
 	"""
-	querset = Slyurl.objects.all()
+	queryset = SlyUrl.objects.all()
 	serializer_class = SlyUrlSerializer
