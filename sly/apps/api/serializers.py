@@ -2,6 +2,12 @@ from sly.apps.shrink.models import SlyUrl
 from rest_framework import serializers
 
 class SlyUrlSerializer(serializers.ModelSerializer):
+	
+	timestamp = serializers.DateTimeField(
+		format='%d.%m.%Y %H:%M',
+		required=False,
+		read_only=True)
+
 	class Meta:
 		model = SlyUrl
 		fields = ("longUrl", "shortCode", "timestamp")
