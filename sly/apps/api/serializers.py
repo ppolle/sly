@@ -1,6 +1,7 @@
 from sly.apps.shrink.models import SlyUrl
 from rest_framework import serializers
 from sly.apps.shrink.views import IndexView
+from sly.apps.shrink.validators import validate_url
 
 class SlyUrlSerializer(serializers.ModelSerializer):
 
@@ -8,6 +9,10 @@ class SlyUrlSerializer(serializers.ModelSerializer):
 		format='%d.%m.%Y %H:%M',
 		required=False,
 		read_only=True)
+
+	longUrl = serializers.URLField(
+		required=True,
+		validators=[validate_url])
 
 	class Meta:
 		model = SlyUrl
