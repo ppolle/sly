@@ -25,10 +25,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
     #Third party apps
     'bootstrap3',
+    'rest_framework',
+
     #Sly apps
     'sly.apps.shrink',
+    'sly.apps.api',
 ]
 
 MIDDLEWARE_CLASSES = [

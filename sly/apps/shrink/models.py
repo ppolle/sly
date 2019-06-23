@@ -8,7 +8,7 @@ from django.core.urlresolvers import reverse
 class SlyUrl(models.Model):
 	'''Model that saves Url info to be shortened'''
 	longUrl = models.URLField(max_length=300)
-	shortCode = models.CharField(max_length=50, blank=True)
+	shortCode = models.CharField(max_length=50, blank=True, unique=True)
 	timestamp = models.DateTimeField(auto_now_add=True)
 
 	def __str__(self):
