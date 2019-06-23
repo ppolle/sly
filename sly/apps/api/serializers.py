@@ -30,3 +30,6 @@ class SlyUrlSerializer(serializers.ModelSerializer):
 			short_url.save()
 
 		return short_url
+
+
+

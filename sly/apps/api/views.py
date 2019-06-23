@@ -16,3 +16,4 @@ class ShortCodeDetail(generics.RetrieveUpdateDestroyAPIView):
 	queryset = SlyUrl.objects.all()
 	serializer_class = SlyUrlSerializer
 	lookup_field = 'shortCode'
+	lookup_url_kwarg = 'shortcode'
