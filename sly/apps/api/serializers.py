@@ -1,8 +1,9 @@
 from sly.apps.shrink.models import SlyUrl
 from rest_framework import serializers
+from sly.apps.shrink.views import IndexView
 
 class SlyUrlSerializer(serializers.ModelSerializer):
-	
+
 	timestamp = serializers.DateTimeField(
 		format='%d.%m.%Y %H:%M',
 		required=False,
@@ -22,26 +23,10 @@ class SlyUrlSerializer(serializers.ModelSerializer):
 			short_url = SlyUrl(longUrl=long_url)
 			short_url.save()
 			short_url.refresh_from_db()
-			short_url.shortCode = self.generate_shortcode(short_url.id)
+			short_url.shortCode = IndexView().generate_shortcode(short_url.id)
 			short_url.save()
 		else:
 			short_url = SlyUrl(longUrl=long_url, shortCode=short_code)
 			short_url.save()
 
 		return short_url
-
-	def generate_shortcode(self, id):
-		'''
-		Generate urls shortcode
-		'''
-		import string
-		characters = string.digits+string.uppercase+string.lowercase
-		base = len(characters)
-		ret = []
-
-		while id > 0:
-			val = id % base
-			ret.append(characters[val])
-			id = id // base
-		
-		return "".join(ret[::-1])
