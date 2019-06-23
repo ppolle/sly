@@ -8,3 +8,11 @@ class ShortCodeList(generics.ListCreateAPIView):
 	"""
 	queryset = SlyUrl.objects.all()
 	serializer_class = SlyUrlSerializer
+
+class ShortCodeDetail(generics.RetrieveUpdateDestroyAPIView):
+	"""
+	Retrieve, update and delete shortcode model instances
+	"""
+	queryset = SlyUrl.objects.all()
+	serializer_class = SlyUrlSerializer
+	lookup_field = 'shortCode'
