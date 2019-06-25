@@ -10,7 +10,7 @@ class IndexView(View):
 		Form to dispaly the index page
 		'''
 		form = UrlForm()
-		return render(request, 'shrink/index.html', {'form':form})
+		return render(request, 'shrink/home/index.html', {'form':form})
 
 	def post(self, request, *args, **kwargs):
 		'''
@@ -34,7 +34,7 @@ class IndexView(View):
 				url = SlyUrl.objects.create(longUrl=longUrl,shortCode=shortCode)
 				
 			
-			template = 'shrink/success.html'
+			template = 'shrink/home/success.html'
 			context = {
 					'url':url					
 				}

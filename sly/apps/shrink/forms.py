@@ -32,6 +32,19 @@ class RegisterUserForm(UserCreationForm):
 		model = User
 		fields = ('first_name', 'last_name', 'email', 'password1', 'password2')
 
+	def save(self):
+		'''
+		Method to create a user
+		'''
+		first_name = self.cleaned_data['first_name']
+		last_name = self.cleaned_data['last_name']
+		email = self.cleaned_data['email']
+		password= self.cleaned_data['password1']
+
+		user = User.objects.create_user(email=email, first_name=first_name, last_name=last_name,
+			password=password)
+		user.save()
+
 class UserAuthForm(forms.ModelForm):
 	'''
 	Form to autheticate users
@@ -44,7 +57,7 @@ class UserAuthForm(forms.ModelForm):
 	class Meta:
 		fields =('email', 'password')
 
-	def authenticate(self):
+	def authenticate(self, request):
 		'''
 		Authenticate users
 		'''
@@ -52,11 +65,11 @@ class UserAuthForm(forms.ModelForm):
 		from django.shortcuts import redirect
 
 		email = self.cleaned_data['email']
-		password = self.cleaned_data['password']
-		user = authenticate(email=email,password=password)
+		password = self.cleaned_data['password1']
+		user = authenticate(request, email=email,password=password)
 
 		if user is not None:
-			login(user)
+			login(request, user)
 			#redirect to the profile page
 
 		else:
