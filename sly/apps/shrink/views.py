@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views.generic.base import View
+from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import UrlForm, RegisterUserForm, UserAuthForm
 from .models import SlyUrl
 
@@ -111,6 +112,14 @@ class AuthView(View):
 			
 
 		return render(request, 'shrink/auth/auth', {'form':form})
+
+class ProfileView(LoginRequiredMixin, View):
+	'''
+	Get dashboard objects
+	'''
+	def get():
+		urls = SlyUrl.objects.filter(created_by=request.user)
+		return render(request, 'shrink/home/dashboard.html', {'urls':urls})
 
 
 
