@@ -82,12 +82,35 @@ class RegistrationView(View):
 		Register a user
 		'''
 		form = RegisterUserForm(request.POST)
+		template = 'shrink/auth/register.html'
 		
 		if form.is_valid():
 			form.save()
-			return redirect(index)
+			return redirect('auth')
 
 		return render(request, 'shrink/auth/register.html', {'form':form})
+
+class AuthView(View):
+	'''
+	Authenticate a user
+	'''
+	def get(self, request, *args, **kwargs):
+		'''
+		Render the auth form
+		'''
+		form = UserAuthForm()
+		return render(request, 'shrink/auth/auth.html', {'form':form})
+
+	def post(self, request, *args, **kwargs):
+		'''
+		Handle form posting
+		'''
+		form = UserAuthForm(request.POST)
+		if form.is_valid():
+			form.authenticate()
+			
+
+		return render(request, 'shrink/auth/auth', {'form':form})
 
 
 

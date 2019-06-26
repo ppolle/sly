@@ -57,6 +57,7 @@ class UserAuthForm(forms.ModelForm):
 		widget=forms.PasswordInput(attrs={'autofocus': 'autofocus', 'class': 'form-control'}))
 	
 	class Meta:
+		model = User
 		fields =('email', 'password')
 
 	def authenticate(self, request):
@@ -72,10 +73,11 @@ class UserAuthForm(forms.ModelForm):
 
 		if user is not None:
 			login(request, user)
-			#redirect to the profile page
+			return redirect('dashboard')
 
 		else:
-			#redirect to the login page
-			pass
+			#should include a message that there is a wrong username/password combination
+			return redirect('auth')
+	
 
 
