@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     #Third party apps
     'bootstrap3',
     'rest_framework',
+    'rest_framework.authtoken',
 
     #Sly apps
     'sly.apps.shrink',
@@ -45,6 +46,14 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+#Django rest-framework settings
+REST_FRAMEWORK = {
+
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    )
+}
 
 ROOT_URLCONF = 'sly.urls'
 

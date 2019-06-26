@@ -1,6 +1,7 @@
 from sly.apps.shrink.models import SlyUrl
 from .serializers import SlyUrlSerializer
 from rest_framework import generics
+from rest_framework.permissions import IsAuthenticated
 
 class ShortCodeList(generics.ListCreateAPIView):
 	"""
@@ -8,6 +9,11 @@ class ShortCodeList(generics.ListCreateAPIView):
 	"""
 	queryset = SlyUrl.objects.all()
 	serializer_class = SlyUrlSerializer
+	permission_classes = (IsAuthenticated,)
+
+	def get_queryset(self):
+		user = self.request.user
+		return SlyUrl.objects.filter(created_by=user)
 
 class ShortCodeDetail(generics.RetrieveUpdateDestroyAPIView):
 	"""
@@ -15,6 +21,7 @@ class ShortCodeDetail(generics.RetrieveUpdateDestroyAPIView):
 	"""
 	queryset = SlyUrl.objects.all()
 	serializer_class = SlyUrlSerializer
+	permission_classes = (IsAuthenticated,)
 	lookup_field = 'shortCode'
 	lookup_url_kwarg = 'shortcode'
 
