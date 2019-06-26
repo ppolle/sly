@@ -84,12 +84,8 @@ class RegistrationView(View):
 		form = RegisterUserForm(request.POST)
 		
 		if form.is_valid():
-			try:
-				form.save()
-				return redirect(index)
-			except Exception as e:
-				print('Error while trying to create user. Error is {}'.format(e))
-
+			form.save()
+			return redirect(index)
 
 		return render(request, 'shrink/auth/register.html', {'form':form})
 

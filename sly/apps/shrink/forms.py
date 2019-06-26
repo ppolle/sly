@@ -27,10 +27,11 @@ class RegisterUserForm(UserCreationForm):
 		widget=forms.PasswordInput(attrs={'autofocus': 'autofocus', 'class': 'form-control'}))
 	password2 = forms.CharField(label="Repeat Password", max_length=300, required=True,
 		widget=forms.PasswordInput(attrs={'autofocus': 'autofocus', 'class': 'form-control'}))
+	# username = forms.CharField()
 	
 	class Meta:
 		model = User
-		fields = ('first_name', 'last_name', 'email', 'password1', 'password2')
+		fields = ('first_name', 'last_name', 'username', 'email', 'password1', 'password2')
 
 	def save(self):
 		'''
@@ -40,9 +41,10 @@ class RegisterUserForm(UserCreationForm):
 		last_name = self.cleaned_data['last_name']
 		email = self.cleaned_data['email']
 		password= self.cleaned_data['password1']
+		username=self.cleaned_data['username']
 
-		user = User.objects.create_user(email=email, first_name=first_name, last_name=last_name,
-			password=password)
+		user = User.objects.create_user(username, email=email, first_name=first_name, 
+			last_name=last_name, password=password)
 		user.save()
 
 class UserAuthForm(forms.ModelForm):
