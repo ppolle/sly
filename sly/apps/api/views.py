@@ -9,7 +9,6 @@ class ShortCodeList(generics.ListCreateAPIView):
 	"""
 	queryset = SlyUrl.objects.all()
 	serializer_class = SlyUrlSerializer
-	permission_classes = (IsAuthenticated,)
 
 	def get_queryset(self):
 		user = self.request.user
@@ -21,7 +20,6 @@ class ShortCodeDetail(generics.RetrieveUpdateDestroyAPIView):
 	"""
 	queryset = SlyUrl.objects.all()
 	serializer_class = SlyUrlSerializer
-	permission_classes = (IsAuthenticated,)
 	lookup_field = 'shortCode'
 	lookup_url_kwarg = 'shortcode'
 
