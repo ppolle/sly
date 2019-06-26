@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views.generic.base import View
-from .forms import UrlForm
+from .forms import UrlForm, RegisterUserForm, UserAuthForm
 from .models import SlyUrl
 
 # Create your views here.
@@ -17,7 +17,7 @@ class IndexView(View):
 		Handle inedx page post requests
 		'''
 		form = UrlForm(request.POST)
-		template = 'shrink/index.html'
+		template = 'shrink/home/index.html'
 		context = {'form':form}
 
 		if form.is_valid():
@@ -31,8 +31,7 @@ class IndexView(View):
 				url.shortCode = self.generate_shortcode(url.id)
 				url.save()
 			else:
-				url = SlyUrl.objects.create(longUrl=longUrl,shortCode=shortCode)
-				
+				url = SlyUrl.objects.create(longUrl=longUrl,shortCode=shortCode)				
 			
 			template = 'shrink/home/success.html'
 			context = {
@@ -57,7 +56,7 @@ class IndexView(View):
 		
 		return "".join(ret[::-1])
 
-class ShortCodeRedirect(View):
+class ShortCodeRedirectView(View):
 	def get(self, request, shortcode, *args, **kwargs):
 		'''
 		Redirect shortcode to the correct url
@@ -66,6 +65,33 @@ class ShortCodeRedirect(View):
 		url_path = SlyUrl.objects.get(shortCode=shortcode)
 		return redirect(url_path.longUrl)
 
+
+class RegistrationView(View):
+	'''
+	Register a new user
+	'''
+	def get(self, request, *args, **kwargs):
+		'''
+		Return the user registration page
+		'''
+		form = RegisterUserForm()
+		return render(request, 'shrink/auth/register.html', {'form':form})
+
+	def post(self, request, *args, **kwargs):
+		'''
+		Register a user
+		'''
+		form = RegisterUserForm(request.POST)
+		
+		if form.is_valid():
+			try:
+				form.save()
+				return redirect(index)
+			except Exception as e:
+				print('Error while trying to create user. Error is {}'.format(e))
+
+
+		return render(request, 'shrink/auth/register.html', {'form':form})
 
 
 
