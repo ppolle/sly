@@ -13,6 +13,18 @@ class UrlForm(forms.Form):
 	short_code = forms.CharField(label='Custom Short Url', max_length=300, required=False, widget=forms.TextInput(
         attrs={'autofocus': 'autofocus', 'class': 'form-control'}))
 
+		# def save(self):
+	# 	'''
+	# 	Save a url object
+	# 	'''
+	# 	url = self.cleaned_data['url']
+	# 	short_code = self.cleaned_data['short_code']
+
+	# 	if short_code:
+	# 		SlyUrl.objects.create(longUrl=url, shortCode=short_code)
+	# 	else:
+	# 		SlyUrl.objects.create(longUrl=longUrl)
+
 class RegisterUserForm(UserCreationForm):
 	'''
 	Form to create a new user
