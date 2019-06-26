@@ -1,7 +1,7 @@
 from sly.apps.shrink.models import SlyUrl
 from .serializers import SlyUrlSerializer
+from .permissions import IsCreatorOrReadOnly
 from rest_framework import generics
-from rest_framework.permissions import IsAuthenticated
 
 class ShortCodeList(generics.ListCreateAPIView):
 	"""
@@ -14,12 +14,16 @@ class ShortCodeList(generics.ListCreateAPIView):
 		user = self.request.user
 		return SlyUrl.objects.filter(created_by=user)
 
+	def perform_create(self, serializer):
+		serializer.save(created_by=self.request.user)
+
 class ShortCodeDetail(generics.RetrieveUpdateDestroyAPIView):
 	"""
 	Retrieve, update and delete shortcode model instances
 	"""
 	queryset = SlyUrl.objects.all()
 	serializer_class = SlyUrlSerializer
+	permission_classes = (IsCreatorOrReadOnly,)
 	lookup_field = 'shortCode'
 	lookup_url_kwarg = 'shortcode'
 
