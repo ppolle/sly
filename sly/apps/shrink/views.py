@@ -25,14 +25,24 @@ class IndexView(View):
 			longUrl = form.cleaned_data['url']
 			shortCode = form.cleaned_data['short_code']
 
-			if shortCode == '':
-				url = SlyUrl(longUrl = longUrl)
-				url.save()
-				url.refresh_from_db()
-				url.shortCode = self.generate_shortcode(url.id)
-				url.save()
+			if request.user.is_authenticated:
+				if shortCode == '':
+					url = SlyUrl(created_by=request.user, longUrl = longUrl)
+					url.save()
+					url.refresh_from_db()
+					url.shortCode = self.generate_shortcode(url.id)
+					url.save()
+				else:
+					url = SlyUrl.objects.create(created_by=request.user, longUrl=longUrl,shortCode=shortCode)
 			else:
-				url = SlyUrl.objects.create(longUrl=longUrl,shortCode=shortCode)				
+				if shortCode == '':
+					url = SlyUrl(longUrl = longUrl)
+					url.save()
+					url.refresh_from_db()
+					url.shortCode = self.generate_shortcode(url.id)
+					url.save()
+				else:
+					url = SlyUrl.objects.create(longUrl=longUrl,shortCode=shortCode)				
 			
 			template = 'shrink/home/success.html'
 			context = {
