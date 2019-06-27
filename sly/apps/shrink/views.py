@@ -99,7 +99,7 @@ class RegistrationView(View):
 			form.save()
 			return redirect('auth')
 
-		return render(request, 'shrink/auth/register.html', {'form':form})
+		return render(request, template, {'form':form})
 
 class AuthView(View):
 	'''
