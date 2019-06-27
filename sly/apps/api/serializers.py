@@ -14,9 +14,11 @@ class SlyUrlSerializer(serializers.ModelSerializer):
 		required=True,
 		validators=[validate_url])
 
+	created_by = serializers.ReadOnlyField(source='created_by.username')
+
 	class Meta:
 		model = SlyUrl
-		fields = ("longUrl", "shortCode", "timestamp")
+		fields = ("longUrl", "shortCode", "timestamp", "created_by")
 
 	def create(self, validated_data):
 		'''
