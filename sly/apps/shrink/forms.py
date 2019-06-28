@@ -38,7 +38,7 @@ class UserAuthForm(forms.Form):
 	'''
 	Form to autheticate users
 	'''
-	email = forms.EmailField(max_length=254, help_text='Required. Inform a valid email address.',
+	username = forms.CharField(max_length=254, help_text='Required. Valid Username.',
 		widget=forms.TextInput(attrs={'autofocus': 'autofocus', 'class': 'form-control'}))
 	password1 = forms.CharField(label="Password", max_length=300, required=True,
 		widget=forms.PasswordInput(attrs={'autofocus': 'autofocus', 'class': 'form-control'}))
@@ -46,25 +46,6 @@ class UserAuthForm(forms.Form):
 	class Meta:
 		model = User
 		fields =('email', 'password1')
-
-	def authenticate(self, request):
-		'''
-		Authenticate users
-		'''
-		from django.contrib.auth import authenticate, login
-		from django.shortcuts import redirect
-
-		email = self.cleaned_data['email']
-		password = self.cleaned_data['password1']
-		user = authenticate(request, email=email,password=password)
-
-		if user is not None:
-			login(request, user)
-			return redirect('dashboard', username=user.username)
-
-		else:
-			#should include a message that there is a wrong username/password combination
-			return redirect('auth')
 	
 
 

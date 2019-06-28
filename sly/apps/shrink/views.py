@@ -1,5 +1,6 @@
-from django.shortcuts import render, redirect
 from django.views.generic.base import View
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import UrlForm, RegisterUserForm, UserAuthForm
 from .models import SlyUrl
@@ -97,7 +98,7 @@ class RegistrationView(View):
 		template = 'shrink/auth/register.html'
 		
 		if form.is_valid():
-			form.save()
+			form.save()			
 			return redirect('dashboard', username=request.user.username)
 
 		return render(request, template, {'form':form})
@@ -119,7 +120,17 @@ class AuthView(View):
 		'''
 		form = UserAuthForm(request.POST)
 		if form.is_valid():
-			form.authenticate()
+			username = form.cleaned_data['username']
+			password = form.cleaned_data['password1']
+			user = authenticate(username=username, password=password)
+
+			if user is not None:
+				login(request, user)
+				return redirect('dashboard', username=user.username)
+
+			else:
+				#should include a message that there is a wrong username/password combination
+				return redirect('auth')
 			
 		return render(request, 'shrink/auth/auth.html', {'form':form})
 
@@ -128,7 +139,7 @@ class ProfileView(LoginRequiredMixin, View):
 	Get dashboard objects
 	'''
 	def get(self, request, *args, **kwargs):
-		urls = SlyUrl.objects.filter(created_by=kwargs['username'])
+		urls = SlyUrl.objects.filter(created_by__username=kwargs['username'])
 		return render(request, 'shrink/home/dashboard.html', {'urls':urls})
 
 
