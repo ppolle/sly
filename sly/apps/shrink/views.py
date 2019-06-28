@@ -98,7 +98,15 @@ class RegistrationView(View):
 		template = 'shrink/auth/register.html'
 		
 		if form.is_valid():
-			form.save()			
+			form.save()
+
+			username = form.cleaned_data['username']
+			password = form.cleaned_data['password1']
+			user = authenticate(username=username, password=password)
+
+			if user is not None:
+				login(request, user)
+
 			return redirect('dashboard', username=request.user.username)
 
 		return render(request, template, {'form':form})
