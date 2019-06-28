@@ -48,6 +48,7 @@ class IndexView(View):
 			context = {
 					'url':url					
 				}
+				
 
 		return render(request, template, context)
 
@@ -97,7 +98,7 @@ class RegistrationView(View):
 		
 		if form.is_valid():
 			form.save()
-			return redirect('auth')
+			return redirect('dashboard', username=request.user.username)
 
 		return render(request, template, {'form':form})
 
@@ -120,15 +121,14 @@ class AuthView(View):
 		if form.is_valid():
 			form.authenticate()
 			
-
-		return render(request, 'shrink/auth/auth', {'form':form})
+		return render(request, 'shrink/auth/auth.html', {'form':form})
 
 class ProfileView(LoginRequiredMixin, View):
 	'''
 	Get dashboard objects
 	'''
-	def get():
-		urls = SlyUrl.objects.filter(created_by=request.user)
+	def get(self, request, *args, **kwargs):
+		urls = SlyUrl.objects.filter(created_by=kwargs['username'])
 		return render(request, 'shrink/home/dashboard.html', {'urls':urls})
 
 

@@ -27,14 +27,14 @@ class RegisterUserForm(UserCreationForm):
 		widget=forms.PasswordInput(attrs={'autofocus': 'autofocus', 'class': 'form-control'}))
 	password2 = forms.CharField(label="Repeat Password", max_length=300, required=True,
 		widget=forms.PasswordInput(attrs={'autofocus': 'autofocus', 'class': 'form-control'}))
-	username = forms.CharField(label='Last Name', max_length=300, required=True,
+	username = forms.CharField(label='Username', max_length=300, required=True,
 		widget=forms.TextInput(attrs={'autofocus': 'autofocus', 'class': 'form-control'}))
 	
 	class Meta:
 		model = User
 		fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2')
 
-class UserAuthForm(forms.ModelForm):
+class UserAuthForm(forms.Form):
 	'''
 	Form to autheticate users
 	'''
@@ -45,7 +45,7 @@ class UserAuthForm(forms.ModelForm):
 	
 	class Meta:
 		model = User
-		fields =('email', 'password')
+		fields =('email', 'password1')
 
 	def authenticate(self, request):
 		'''
@@ -60,7 +60,7 @@ class UserAuthForm(forms.ModelForm):
 
 		if user is not None:
 			login(request, user)
-			return redirect('dashboard')
+			return redirect('dashboard', username=user.username)
 
 		else:
 			#should include a message that there is a wrong username/password combination
