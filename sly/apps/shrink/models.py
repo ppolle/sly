@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 
+from . import utils
 from django.db import models
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
@@ -29,6 +30,14 @@ class SlyUrl(models.Model):
 def create_auth_token(sender, instance=None, created=False, **kwargs):
     if created:
         Token.objects.create(user=instance)
+
+@receiver(post_save, sender=SlyUrl)
+def create_short_url(sender, instance=None, **kwargs):
+	if instance.shortCode == '':
+		instance.shortCode = utils.generate_shortcode(instance.id)
+		instance.save()
+		print('Just testing this thing {}'.format(instance.shortCode))
+
 		
 
 

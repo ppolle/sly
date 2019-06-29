@@ -6,7 +6,19 @@
     <div class="panel panel-default">
 	<div class="panel-body">
 		{% for obj in obj %}
-			{{obj.token}}
+			{{obj.first_name.capitalize}}
+			{{obj.last_name.capitalize}}
+			<table>
+				<tr>
+					<th>Long Url</th>
+					<th>Short Url</th>
+				</tr>
+				<tr>
+					<td>{{obj.token}}</td>
+					<td>{{obj.slyurl}}</td>
+				</tr>
+			</table>
+			
 		{% endfor %}
 		
 	</div>

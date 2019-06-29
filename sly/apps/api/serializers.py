@@ -20,23 +20,5 @@ class SlyUrlSerializer(serializers.ModelSerializer):
 		model = SlyUrl
 		fields = ("longUrl", "shortCode", "timestamp", "created_by")
 
-	def create(self, validated_data):
-		'''
-		Custom shortcode creation
-		'''
-		short_code = validated_data['shortCode']
-		long_url = validated_data['longUrl']
-		if validated_data['shortCode'] == '':
-			short_url = SlyUrl(longUrl=long_url)
-			short_url.save()
-			short_url.refresh_from_db()
-			short_url.shortCode = IndexView().generate_shortcode(short_url.id)
-			short_url.save()
-		else:
-			short_url = SlyUrl(longUrl=long_url, shortCode=short_code)
-			short_url.save()
-
-		return short_url
-
 
 

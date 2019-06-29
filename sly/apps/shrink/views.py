@@ -27,23 +27,9 @@ class IndexView(View):
 			shortCode = form.cleaned_data['short_code']
 
 			if request.user.is_authenticated:
-				if shortCode == '':
-					url = SlyUrl(created_by=request.user, longUrl = longUrl)
-					url.save()
-					url.refresh_from_db()
-					url.shortCode = self.generate_shortcode(url.id)
-					url.save()
-				else:
-					url = SlyUrl.objects.create(created_by=request.user, longUrl=longUrl,shortCode=shortCode)
+				url = SlyUrl.objects.create(created_by=request.user, longUrl = longUrl, shortCode=shortCode)
 			else:
-				if shortCode == '':
-					url = SlyUrl(longUrl = longUrl)
-					url.save()
-					url.refresh_from_db()
-					url.shortCode = self.generate_shortcode(url.id)
-					url.save()
-				else:
-					url = SlyUrl.objects.create(longUrl=longUrl,shortCode=shortCode)				
+				url = SlyUrl.objects.create(longUrl = longUrl, shortCode=shortCode)			
 			
 			template = 'shrink/home/success.html'
 			context = {
@@ -52,22 +38,6 @@ class IndexView(View):
 				
 
 		return render(request, template, context)
-
-	def generate_shortcode(self, id):
-		'''
-		Generate urls shortcode
-		'''
-		import string
-		characters = string.digits+string.uppercase+string.lowercase
-		base = len(characters)
-		ret = []
-
-		while id > 0:
-			val = id % base
-			ret.append(characters[val])
-			id = id // base
-		
-		return "".join(ret[::-1])
 
 class ShortCodeRedirectView(View):
 	def get(self, request, shortcode, *args, **kwargs):
