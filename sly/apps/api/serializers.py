@@ -10,7 +10,7 @@ class SlyUrlSerializer(serializers.ModelSerializer):
 		required=False,
 		read_only=True)
 
-	longUrl = serializers.URLField(
+	long_url = serializers.URLField(
 		required=True,
 		validators=[validate_url])
 
@@ -18,7 +18,7 @@ class SlyUrlSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = SlyUrl
-		fields = ("longUrl", "shortCode", "timestamp", "created_by")
+		fields = ("long_url", "short_code", "timestamp", "created_by")
 
 
 

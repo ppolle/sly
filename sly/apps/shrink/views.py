@@ -23,20 +23,19 @@ class IndexView(View):
 		context = {'form':form}
 
 		if form.is_valid():
-			longUrl = form.cleaned_data['url']
-			shortCode = form.cleaned_data['short_code']
+			long_url = form.cleaned_data['url']
+			short_code = form.cleaned_data['short_code']
 
 			if request.user.is_authenticated:
-				url = SlyUrl.objects.create(created_by=request.user, longUrl = longUrl, shortCode=shortCode)
+				url = SlyUrl.objects.create(created_by=request.user, long_url = long_url, short_code=short_code)
 			else:
-				url = SlyUrl.objects.create(longUrl = longUrl, shortCode=shortCode)			
+				url = SlyUrl.objects.create(long_url = long_url, short_code=short_code)			
 			
 			template = 'shrink/home/success.html'
 			context = {
 					'url':url					
 				}
 				
-
 		return render(request, template, context)
 
 class ShortCodeRedirectView(View):
@@ -45,7 +44,7 @@ class ShortCodeRedirectView(View):
 		Redirect shortcode to the correct url
 		'''
 	
-		url_path = SlyUrl.objects.get(shortCode=shortcode)
+		url_path = SlyUrl.objects.get(short_code=shortcode)
 		return redirect(url_path.longUrl)
 
 
