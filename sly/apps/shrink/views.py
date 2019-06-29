@@ -147,8 +147,9 @@ class ProfileView(LoginRequiredMixin, View):
 	Get dashboard objects
 	'''
 	def get(self, request, *args, **kwargs):
-		urls = SlyUrl.objects.filter(created_by__username=kwargs['username'])
-		return render(request, 'shrink/home/dashboard.html', {'urls':urls})
+		from django.contrib.auth.models import User
+		obj = User.objects.filter(username=kwargs['username'])
+		return render(request, 'shrink/home/dashboard.html', {'obj':obj})
 
 
 

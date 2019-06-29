@@ -17,9 +17,10 @@
       
       <ul class="nav navbar-nav navbar-right">
         <li><a href="#">Developers</a></li>
-        <li><a href="{% url 'register' %}">Create Account</a></li>
         {% if request.user.is_authenticated %}
          <li><a href="{% url 'logout' %}">Logout</a></li>
+         {% else %}
+         <li><a href="{% url 'register' %}">Create Account</a></li>
          {% endif %}
         
       </ul>
