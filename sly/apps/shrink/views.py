@@ -107,7 +107,7 @@ class RegistrationView(View):
 			if user is not None:
 				login(request, user)
 
-			return redirect('dashboard', username=request.user.username)
+			return redirect('dashboard', username=username)
 
 		return render(request, template, {'form':form})
 
