@@ -17,11 +17,12 @@
       
       <ul class="nav navbar-nav navbar-right">
         <li><a href="#">Developers</a></li>
-        <li><a href="{% url 'dashboard' request.user.username %}">{{request.user|title}}</a></li>
         {% if request.user.is_authenticated %}
+         <li><a href="{% url 'dashboard' username=request.user.username %}">{{request.user|title}}</a></li>
          <li><a href="{% url 'logout' %}">Logout</a></li>
          {% else %}
          <li><a href="{% url 'register' %}">Create Account</a></li>
+         <li><a href="{% url 'auth' %}">Login</a></li>
          {% endif %}
         
       </ul>

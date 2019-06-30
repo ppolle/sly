@@ -43,7 +43,6 @@ class ShortCodeRedirectView(View):
 		'''
 		Redirect shortcode to the correct url
 		'''
-	
 		url_path = SlyUrl.objects.get(short_code=shortcode)
 		return redirect(url_path.longUrl)
 
@@ -116,9 +115,12 @@ class ProfileView(LoginRequiredMixin, View):
 	Get dashboard objects
 	'''
 	def get(self, request, *args, **kwargs):
-		from django.contrib.auth.models import User
-		obj = User.objects.filter(username=kwargs['username'])
-		return render(request, 'shrink/home/dashboard.html', {'obj':obj})
+		if request.user.username is not kwargs['username']:
+			return redirect('dashboard', username=request.user.username)
+		else:
+			from django.contrib.auth.models import User
+			obj = User.objects.filter(username=kwargs['username'])
+			return render(request, 'shrink/home/dashboard.html', {'obj':obj})
 
 
 
