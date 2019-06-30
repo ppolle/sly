@@ -115,7 +115,7 @@ class ProfileView(LoginRequiredMixin, View):
 	Get dashboard objects
 	'''
 	def get(self, request, *args, **kwargs):
-		if request.user.username is not kwargs['username']:
+		if request.user.username != kwargs['username']:
 			return redirect('dashboard', username=request.user.username)
 		else:
 			from django.contrib.auth.models import User
