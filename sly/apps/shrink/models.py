@@ -16,6 +16,7 @@ class SlyUrl(models.Model):
 	created_by = models.ForeignKey(User, related_name="slyurls", null=True, blank=True, on_delete=models.CASCADE)
 	long_url = models.URLField(max_length=300)
 	short_code = models.CharField(max_length=50, blank=True, unique=True)
+	active =  models.BooleanField(default=True)
 	timestamp = models.DateTimeField(auto_now_add=True)
 
 	def __str__(self):
