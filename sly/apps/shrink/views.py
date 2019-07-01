@@ -44,7 +44,10 @@ class ShortCodeRedirectView(View):
 		Redirect shortcode to the correct url
 		'''
 		url_path = SlyUrl.objects.get(short_code=shortcode)
-		return redirect(url_path.longUrl)
+		if url_path.active is True:
+			return redirect(url_path.long_url)
+		else:
+			return render(request, 'shrink/home/inactive_url.html', {'url':url_path})
 
 
 class RegistrationView(View):
