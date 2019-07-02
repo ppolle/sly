@@ -39,53 +39,25 @@ class RegisterUserForm(UserCreationForm):
 		widget=forms.PasswordInput(attrs={'autofocus': 'autofocus', 'class': 'form-control'}))
 	password2 = forms.CharField(label="Repeat Password", max_length=300, required=True,
 		widget=forms.PasswordInput(attrs={'autofocus': 'autofocus', 'class': 'form-control'}))
+	username = forms.CharField(label='Username', max_length=300, required=True,
+		widget=forms.TextInput(attrs={'autofocus': 'autofocus', 'class': 'form-control'}))
 	
 	class Meta:
 		model = User
-		fields = ('first_name', 'last_name', 'email', 'password1', 'password2')
+		fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2')
 
-	def save(self):
-		'''
-		Method to create a user
-		'''
-		first_name = self.cleaned_data['first_name']
-		last_name = self.cleaned_data['last_name']
-		email = self.cleaned_data['email']
-		password= self.cleaned_data['password1']
-
-		user = User.objects.create_user(email=email, first_name=first_name, last_name=last_name,
-			password=password)
-		user.save()
-
-class UserAuthForm(forms.ModelForm):
+class UserAuthForm(forms.Form):
 	'''
 	Form to autheticate users
 	'''
-	email = forms.EmailField(max_length=254, help_text='Required. Inform a valid email address.',
+	username = forms.CharField(max_length=254, help_text='Required. Valid Username.',
 		widget=forms.TextInput(attrs={'autofocus': 'autofocus', 'class': 'form-control'}))
 	password1 = forms.CharField(label="Password", max_length=300, required=True,
 		widget=forms.PasswordInput(attrs={'autofocus': 'autofocus', 'class': 'form-control'}))
 	
 	class Meta:
-		fields =('email', 'password')
-
-	def authenticate(self, request):
-		'''
-		Authenticate users
-		'''
-		from django.contrib.auth import authenticate, login
-		from django.shortcuts import redirect
-
-		email = self.cleaned_data['email']
-		password = self.cleaned_data['password1']
-		user = authenticate(request, email=email,password=password)
-
-		if user is not None:
-			login(request, user)
-			#redirect to the profile page
-
-		else:
-			#redirect to the login page
-			pass
+		model = User
+		fields =('email', 'password1')
+	
 
 
