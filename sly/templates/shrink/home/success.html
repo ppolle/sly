@@ -1,14 +1,14 @@
 {% extends 'base.html' %}
+{% load fullurl %}
 {% block content %}
 <div class="row">
 	<div class="col-md-2"></div>
 	<div class="col-md-8">
 		<div>Your shortcode has been succesfully created as shown below:</div>
-		<P><a href="{url.get_short_url}}">{{url.long_url}}</a></P> is now: <p><a href="{{url.get_short_url}}">{{url.get_short_url}}</a></P>
-		{% for a in all %}
-		
+		<P><a href="{% buildfullurl url.get_short_url %}}">{{url.long_url}}</a></P> is now: <p><a href="{% buildfullurl url.get_short_url %}">{% buildfullurl url.get_short_url %}</a></P>
+			
+			
 
-		{%endfor %}
 	</div>
 	<div class="col-md-2"></div>
 </div>
