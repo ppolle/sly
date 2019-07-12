@@ -121,10 +121,13 @@ class ProfileView(LoginRequiredMixin, View):
 		if request.user.username != kwargs['username']:
 			return redirect('dashboard', username=request.user.username)
 		else:
-			from django.contrib.auth.models import User
-			obj = User.objects.filter(username=kwargs['username'])
-			return render(request, 'shrink/home/dashboard.html', {'obj':obj})
+			from rest_framework.authtoken.models import Token
+			try:
+				obj = Token.objects.get(user=request.user)
+			except ObjectDoesNotExist:
+				obj = Token.objects.create(user=request.user)
 
+			return render(request, 'shrink/home/dashboard.html', {'obj':obj})
 
 
 

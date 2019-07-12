@@ -1,31 +1,67 @@
 {% extends 'base.html' %}
+
+{% load fullurl %}
+
+{% block js %}
+	<script type='text/javascript' src='//platform-api.sharethis.com/js/sharethis.js#property=5a200590689cdf0012ad4a62&product=inline-share-buttons' async='async'></script>
+{% endblock %}
+
 {% block content %}
-<div class="col-md-3"></div>
-<div class="col-md-6">
-	Welcome to your profile page<br>
-    <div class="panel panel-default">
-	<div class="panel-body">
-		{% for obj in obj %}
-			{{obj.first_name.capitalize}}
-			{{obj.last_name.capitalize}}
-			<table>
-				<tr>
-					<th>Long Url</th>
+<div class="row">
+	<div class="col-md-1"></div>
+	<div class="col-md-6">
+		Profile Info
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<P>
+				Full Name: <strong>{{obj.user.first_name.capitalize}}
+						   {{obj.user.last_name.capitalize}}
+						   </strong>
+				</P>
+				<p>API Key: <strong>{{obj.key}}</strong>
+					<div class="btn btn-sm btn-default">Copy Key</div>
+					<div class="btn btn-sm btn-primary">Regenerate Key</div>
+				</p>
+
+			</div>
+		</div>
+	</div>
+	<div class="col-md-5"></div>
+</div>
+<div class="row">
+	<div class="col-md-1"></div>
+	<div class="col-md-10">
+		ShortUrl Info<br>
+	    <div class="panel panel-default">
+		<div class="panel-body">
+
+			<div class="table-responsive">
+				<table class="table table-bordered">
+				  	<th>Long Url</th>
 					<th>Short Url</th>
-				</tr>
-				<tr>
-					<td>{{obj.token}}</td>
-					<td>{{obj.slyurl}}</td>
-				</tr>
-			</table>
+					<th>Active Status</th>
+					{% for url in obj.user.slyurls.all %}
+						<tr>
+							<td>{{url.long_url|truncatechars:60}}</td>
+							<td>{% buildfullurl url.get_short_url %}</td>
+							<td>{% if url.active == True %}
+								Active
+								{%else%}
+								Inactive
+								{%endif%}
+							</td>
+						</tr>
+					{%endfor%}
+				</table>
+			</div>
 			
-		{% endfor %}
+		</div>
+		</div>
+	</div>
+	<div class="col-md-1"></div>
+</div>
 		
-	</div>
-	</div>
-	</div>
-		
-<div class="col-md-3"></div>
+
 
 
 
