@@ -26,6 +26,20 @@ class SlyUrl(models.Model):
 		'''get the shortcode url'''
 		return reverse('shorturl', kwargs={'shortcode': self.short_code})
 
+	def activate(self):
+		'''
+		Changes a url status to active
+		'''
+		if self.active is False:
+			self.active = True
+
+	def deactivate(self):
+		'''
+		Changes a url status to inactive
+		'''
+		if self.active is True:
+			self.actve = False
+
 
 @receiver(post_save, sender=User)
 def create_auth_token(sender, instance=None, created=False, **kwargs):
