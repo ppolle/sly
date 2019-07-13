@@ -1,7 +1,6 @@
 from django.views.generic.base import View
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
-from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import UrlForm, RegisterUserForm, UserAuthForm
 from .models import SlyUrl
@@ -123,7 +122,7 @@ class ProfileView(LoginRequiredMixin, View):
 			from rest_framework.authtoken.models import Token
 			try:
 				obj = Token.objects.get(user=request.user)
-			except ObjectDoesNotExist:
+			except Token.DoesNotExist:
 				obj = Token.objects.create(user=request.user)
 
 			return render(request, 'shrink/home/dashboard.html', {'obj':obj})
@@ -137,7 +136,7 @@ class RegenerateTokenView(LoginRequiredMixin, View):
 		try:
 			token = Token.objects.get(user=request.user)
 			token.delete()
-		except ObjectDoesNotExist:
+		except Token.DoesNotExist:
 			pass
 
 		Token.objects.create(user=request.user)
