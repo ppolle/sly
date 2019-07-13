@@ -7,7 +7,6 @@
 
 {% block content %}
 <div class="row">
-	<div class="col-md-2"></div>
 	<div class="col-md-10">
 		<div>Your shortcode has been succesfully created as shown below:</div>
 		<P><a href="{{obj.long_url}}">{{obj.long_url}}</a></P> is now: <p><a href="{% buildfullurl obj.get_short_url %}">{% buildfullurl obj.get_short_url %}</a>

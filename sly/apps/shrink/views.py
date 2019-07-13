@@ -1,9 +1,11 @@
 from django.views.generic.base import View
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
+from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import UrlForm, RegisterUserForm, UserAuthForm
 from .models import SlyUrl
+from django.contrib import messages
 
 # Create your views here.
 class IndexView(View):
@@ -29,8 +31,9 @@ class IndexView(View):
 			if request.user.is_authenticated:
 				obj = SlyUrl.objects.create(created_by=request.user, long_url = long_url, short_code=short_code)
 			else:
-				obj = SlyUrl.objects.create(long_url = long_url, short_code=short_code)			
-						
+				obj = SlyUrl.objects.create(long_url = long_url, short_code=short_code)
+
+		messages.success(request, 'ShortUrl creation was a success')			
 		return redirect('shortcode_detail', shortcode=obj.short_code)
 
 class ShortCodeRedirectView(View):
@@ -72,7 +75,7 @@ class RegistrationView(View):
 
 			if user is not None:
 				login(request, user)
-
+			messages.success(request, 'Succesfull Registration. Now take a tour of the Sly Dashboard.')
 			return redirect('dashboard', username=username)
 
 		return render(request, template, {'form':form})
@@ -100,10 +103,11 @@ class AuthView(View):
 
 			if user is not None:
 				login(request, user)
+				messages.success(request, 'Welcome back {0} {1}'.format(user.first_name.capitalize(), user.last_name.capitalize()))
 				return redirect('dashboard', username=user.username)
 
 			else:
-				#should include a message that there is a wrong username/password combination
+				messages.error(request, 'Wrong username/password combination. Please try again.')
 				return redirect('auth')
 			
 		return render(request, 'shrink/auth/auth.html', {'form':form})
@@ -137,6 +141,7 @@ class RegenerateTokenView(LoginRequiredMixin, View):
 			pass
 
 		Token.objects.create(user=request.user)
+		messages.success(request, 'API Authentication key succesfully regenerated')
 		return redirect('dashboard', username=request.user.username)
 
 class ShortUrlDetailView(View):

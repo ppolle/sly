@@ -8,8 +8,8 @@
 
 {% block content %}
 <div class="row">
-	<div class="col-md-1"></div>
-	<div class="col-md-6">
+	
+	<div class="col-md-7">
 		Profile Info
 		<div class="panel panel-default">
 			<div class="panel-body">
@@ -29,9 +29,9 @@
 	<div class="col-md-5"></div>
 </div>
 <div class="row">
-	<div class="col-md-1"></div>
+	
 	{% if obj.user.slyurls.all %}
-	<div class="col-md-10">
+	<div class="col-md-12">
 		ShortUrl Info<br>
 	    <div class="panel panel-default">
 		<div class="panel-body">
@@ -61,7 +61,6 @@
 	</div>
 	{%else%}
 	{%endif%}
-	<div class="col-md-1"></div>
 </div>
 		
 
