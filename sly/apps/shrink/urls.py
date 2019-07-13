@@ -9,4 +9,5 @@ urlpatterns = [
 	url(r'^auth/login/$', views.AuthView.as_view(), name='auth'),
 	url(r'^user/profile/(?P<username>[\w-]+)/$', views.ProfileView.as_view(), name='dashboard'),
 	url(r'^user/logout/$', auth_views.logout, {"next_page": '/'}, name='logout'),
+	url(r'^user/regenerate-token/$', views.RegenerateTokenView.as_view(), name='regenerate-token'),
 ]

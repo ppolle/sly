@@ -129,5 +129,23 @@ class ProfileView(LoginRequiredMixin, View):
 
 			return render(request, 'shrink/home/dashboard.html', {'obj':obj})
 
+class RegenerateTokenView(LoginRequiredMixin, View):
+	'''
+	Regenerate Authentication Token
+	'''
+	def get(self, request, *args, **kwargs):
+		from rest_framework.authtoken.models import Token
+		try:
+			token = Token.objects.get(user=request.user)
+			token.delete()
+		except ObjectDoesNotExist:
+			pass
+
+		Token.objects.create(user=request.user)
+		return redirect('dashboard', username=request.user.username)
+
+
+
+
 
 

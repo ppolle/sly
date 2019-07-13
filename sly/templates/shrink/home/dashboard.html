@@ -20,7 +20,7 @@
 				</P>
 				<p>API Key: <strong>{{obj.key}}</strong>
 					<div class="btn btn-sm btn-default">Copy Key</div>
-					<div class="btn btn-sm btn-primary">Regenerate Key</div>
+					<a href="{% url 'regenerate-token' %}" class="btn btn-sm btn-primary">Regenerate Auth Key</a>
 				</p>
 
 			</div>
