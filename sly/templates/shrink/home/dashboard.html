@@ -42,7 +42,7 @@
 					<th>Active Status</th>
 					{% for url in obj.user.slyurls.all %}
 						<tr>
-							<td>{{url.long_url|truncatechars:60}}</td>
+							<td><a href="{% url 'shortcode_detail' url.short_code %}">{{url.long_url|truncatechars:60}}</a></td>
 							<td>{% buildfullurl url.get_short_url %}</td>
 							<td>{% if url.active == True %}
 								Active

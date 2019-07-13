@@ -27,16 +27,11 @@ class IndexView(View):
 			short_code = form.cleaned_data['short_code']
 
 			if request.user.is_authenticated:
-				url = SlyUrl.objects.create(created_by=request.user, long_url = long_url, short_code=short_code)
+				obj = SlyUrl.objects.create(created_by=request.user, long_url = long_url, short_code=short_code)
 			else:
-				url = SlyUrl.objects.create(long_url = long_url, short_code=short_code)			
-			
-			template = 'shrink/home/success.html'
-			context = {
-					'url':url					
-				}
-				
-		return render(request, template, context)
+				obj = SlyUrl.objects.create(long_url = long_url, short_code=short_code)			
+						
+		return redirect('shortcode_detail', shortcode=obj.short_code)
 
 class ShortCodeRedirectView(View):
 	def get(self, request, shortcode, *args, **kwargs):
@@ -143,6 +138,14 @@ class RegenerateTokenView(LoginRequiredMixin, View):
 
 		Token.objects.create(user=request.user)
 		return redirect('dashboard', username=request.user.username)
+
+class ShortUrlDetailView(View):
+	def get(self, request, *args, **kwargs):
+		'''
+		Get Shortcode Details
+		'''
+		obj = SlyUrl.objects.get(short_code=kwargs['shortcode'])
+		return render(request, 'shrink/home/success.html', {'obj':obj})
 
 
 
