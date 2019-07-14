@@ -22,6 +22,10 @@ class SlyUrl(models.Model):
 	def __str__(self):
 		return self.long_url
 
+	class Meta:
+		ordering = ['-timestamp']
+
+
 	def get_short_url(self):
 		'''get the shortcode url'''
 		return reverse('shorturl', kwargs={'shortcode': self.short_code})
