@@ -40,7 +40,3 @@ def create_short_url(sender, instance=None, **kwargs):
 	if instance.short_code == '':
 		instance.short_code = utils.generate_shortcode(instance.id)
 		instance.save()
-
-		
-
-
