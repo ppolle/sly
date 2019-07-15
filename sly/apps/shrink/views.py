@@ -151,6 +151,18 @@ class ShortUrlDetailView(View):
 		obj = SlyUrl.objects.get(short_code=kwargs['shortcode'])
 		return render(request, 'shrink/home/success.html', {'obj':obj})
 
+class DeleteShortCodeView(View):
+	def get(self, request, *args, **kwargs):
+		'''
+		Delete a shortcode
+		'''
+		delete_shortcode = SlyUrl.objects.get(short_code=kwargs['shortcode']).delete()
+		messages.success(request, 'Shortcode succesfully deleted')
+		if request.user.is_authenticated:
+			return redirect('dashboard', username=request.user.username)
+		else:
+			return redirect('/')
+
 
 
 
