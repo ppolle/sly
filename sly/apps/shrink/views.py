@@ -163,6 +163,24 @@ class DeleteShortCodeView(View):
 		else:
 			return redirect('/')
 
+class ChangeShortUrlStatusView(View):
+	def get(self, request, *args, **kwargs):
+		'''
+		Change the status of a shortcode url to either active/inactive
+		'''
+		obj = SlyUrl.objects.get(short_code=kwargs['shortcode'])
+		if obj.active is True:
+			obj.active = False
+			obj.save()
+		else:
+			obj.active = True
+			obj.save()
+
+		messages.success(request, 'ShortUrl status succesfully changed')
+		return redirect('shortcode_detail', shortcode=obj.short_code)
+
+
+
 
 
 

@@ -11,5 +11,6 @@ urlpatterns = [
 	url(r'^user/regenerate-token/$', views.RegenerateTokenView.as_view(), name='regenerate-token'),
 	url(r'^shortcode/(?P<shortcode>[\w-]+)/$', views.ShortUrlDetailView.as_view(), name='shortcode_detail'),
 	url(r'^shortcode/delete/(?P<shortcode>[\w-]+)/$', views.DeleteShortCodeView.as_view(), name='shortcode_delete'),
+	url(r'^shortcode/status/(?P<shortcode>[\w-]+)/$', views.ChangeShortUrlStatusView.as_view(), name='shortcode_change_status'),
 	url(r'^(?P<shortcode>[\w-]+)/$', views.ShortCodeRedirectView.as_view(), name='shorturl'),
 ]
