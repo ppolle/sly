@@ -61,4 +61,45 @@ class UserAuthFormTests(TestCase):
 			self.assertTrue(field, error)
 		self.assertFalse(form.is_valid())
 
+class RegisterUserFormTests(TestCase):
+	def test_form_valid(self):
+		data = {'first_name':'Peter',
+				'last_name':'Polle',
+				'email':'peterpolle@gmail.com',
+				'password1':'iamTHEBIGBOSS1234',
+				'password2':'iamTHEBIGBOSS1234',
+				'username':'ppolle'
+				}
+		form = RegisterUserForm(data=data)
+		if form.errors.items():
+			field, error = form.errors.items()[0]
+			self.assertEqual(field, error)
+
+		self.assertTrue(form.is_valid())
+
+	def test_form_invalid(self):
+		data = {'first_name':'Peter',
+				'last_name':'Polle',
+				'email':'peter@polle@gmail.com',
+				'password1':'iamTHEBIGBOSS1234',
+				'password2':'iamTHEBIGBOSS1234',
+				}
+		form = RegisterUserForm(data=data)
+		self.assertFalse(form.is_valid())
+
+	def test_password1_must_be_equal_to_password2(self):
+		data = {'first_name':'Peter',
+		'last_name':'Polle',
+		'email':'peter@polle@gmail.com',
+		'password1':'iamTHEBIGBOSS1234',
+		'password2':'iamTHEBIGBOSS123',
+		'username':'ppolle'
+		}
+		form = RegisterUserForm(data=data)
+		if form.errors.items():
+			field, error = form.errors.items()[0]
+			self.assertEqual(error[0], "The two password fields didn't match.")
+
+		self.assertFalse(form.is_valid())
+
 
