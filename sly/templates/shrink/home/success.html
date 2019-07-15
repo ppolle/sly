@@ -1,17 +1,27 @@
 {% extends 'base.html' %}
+{% load fullurl %}
+
+{% block js %}
+	<script type='text/javascript' src='//platform-api.sharethis.com/js/sharethis.js#property=5a200590689cdf0012ad4a62&product=inline-share-buttons' async='async'></script>
+{% endblock %}
+
 {% block content %}
 <div class="row">
-	<div class="col-md-2"></div>
-	<div class="col-md-8">
+	<div class="col-md-10">
 		<div>Your shortcode has been succesfully created as shown below:</div>
-		<P><a href="{url.get_short_url}}">{{url.long_url}}</a></P> is now: <p><a href="{{url.get_short_url}}">{{url.get_short_url}}</a></P>
-		{% for a in all %}
-		
-
-		{%endfor %}
+		<P><a href="{{obj.long_url}}">{{obj.long_url}}</a></P> is now: <p><a href="{% buildfullurl obj.get_short_url %}">{% buildfullurl obj.get_short_url %}</a>
+			<button class="btn btn-default" type="button" data-clipboard-text="{% buildfullurl obj.get_short_url %}">Copy Url</button>
+		<div class="sharethis-inline-share-buttons"></div>
+		</P>
+			
 	</div>
-	<div class="col-md-2"></div>
+	
 </div>
 
-
+{% endblock %}
+{% block scripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js"></script>
+<script type="text/javascript">
+	new ClipboardJS('.btn');
+</script>
 {% endblock %}

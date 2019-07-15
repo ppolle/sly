@@ -1,32 +1,83 @@
 {% extends 'base.html' %}
+
+{% load fullurl %}
+
+{% block js %}
+	<script type='text/javascript' src='//platform-api.sharethis.com/js/sharethis.js#property=5a200590689cdf0012ad4a62&product=inline-share-buttons' async='async'></script>
+{% endblock %}
+
 {% block content %}
-<div class="col-md-3"></div>
-<div class="col-md-6">
-	Welcome to your profile page<br>
-    <div class="panel panel-default">
-	<div class="panel-body">
-		{% for obj in obj %}
-			{{obj.first_name.capitalize}}
-			{{obj.last_name.capitalize}}
-			<table>
-				<tr>
-					<th>Long Url</th>
+<div class="row">
+	
+	<div class="col-md-7">
+		Profile Info
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<P>
+				Full Name: <strong>{{obj.user.first_name.capitalize}}
+						   {{obj.user.last_name.capitalize}}
+						   </strong>
+				</P>
+				<p>
+					<div class="input-group">
+					  <span class="input-group-addon">API key</span>
+				      <input class="form-control" id="disabledInput" type="text" placeholder="{{obj.key}}" disabled>
+				      <span class="input-group-btn">
+				        <button class="btn btn-default" type="button" data-clipboard-text="{{obj.key}}">Copy!</button>
+				      </span>
+				    </div>
+					
+				</p>
+				<a href="{% url 'regenerate-token' %}" class="btn btn-sm btn-primary">Regenerate Auth Key</a>
+
+			</div>
+		</div>
+	</div>
+	<div class="col-md-5"></div>
+</div>
+<div class="row">
+	
+	{% if obj.user.slyurls.all %}
+	<div class="col-md-12">
+		ShortUrl Info<br>
+	    <div class="panel panel-default">
+		<div class="panel-body">
+
+			<div class="table-responsive">
+				<table class="table table-bordered">
+				  	<th>Long Url</th>
 					<th>Short Url</th>
-				</tr>
-				<tr>
-					<td>{{obj.token}}</td>
-					<td>{{obj.slyurl}}</td>
-				</tr>
-			</table>
+					<th>Active Status</th>
+					{% for url in obj.user.slyurls.all %}
+						<tr>
+							<td><a href="{% url 'shortcode_detail' url.short_code %}">{{url.long_url|truncatechars:60}}</a></td>
+							<td>{% buildfullurl url.get_short_url %}</td>
+							<td>{% if url.active == True %}
+								Active
+								{%else%}
+								Inactive
+								{%endif%}
+							</td>
+						</tr>
+					{%endfor%}
+				</table>
+			</div>
 			
-		{% endfor %}
+		</div>
+		</div>
+	</div>
+	{%else%}
+	{%endif%}
+</div>
 		
-	</div>
-	</div>
-	</div>
-		
-<div class="col-md-3"></div>
 
 
 
+
+{% endblock %}
+{% block scripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js"></script>
+<script type="text/javascript">
+	new ClipboardJS('.btn');
+</script>
 {% endblock %}

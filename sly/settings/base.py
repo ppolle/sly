@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     
     #Third party apps
     'bootstrap3',
+    'fullurl',
     'rest_framework',
     'rest_framework.authtoken',
 
@@ -60,7 +61,9 @@ REST_FRAMEWORK = {
     
     'DEFAULT_RENDERER_CLASSES': (
         'rest_framework.renderers.JSONRenderer',
-    )
+    ),
+    
+    'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.URLPathVersioning',
 }
 
 ROOT_URLCONF = 'sly.urls'
