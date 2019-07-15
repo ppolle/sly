@@ -11,13 +11,13 @@
 		<div>Your shortcode has been succesfully created as shown below:</div>
 		<P><a href="{{obj.long_url}}">{{obj.long_url}}</a></P> is now: <p><a href="{% buildfullurl obj.get_short_url %}">{% buildfullurl obj.get_short_url %}</a>
 			<button class="btn btn-default" type="button" data-clipboard-text="{% buildfullurl obj.get_short_url %}">Copy Url</button>
-			<a href="{% url 'shortcode_delete' shortcode=obj.short_code %}" class="btn btn-danger">Delete</a>
 			{% if obj.active%}
 			<a href="{% url 'shortcode_change_status' shortcode=obj.short_code %}" class="btn btn-danger">Deactivate Url</a>
 			{% else %}
 			<a href="{% url 'shortcode_change_status' shortcode=obj.short_code %}" class="btn btn-primary">
 			Activate Url</a>
 			{%endif%}
+			<a href="{% url 'shortcode_delete' shortcode=obj.short_code %}" class="btn btn-danger">Delete</a>
 
 		<div class="sharethis-inline-share-buttons"></div>
 		</P>
