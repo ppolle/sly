@@ -18,7 +18,7 @@ class SlyUrlSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = SlyUrl
-		fields = ("long_url", "short_code", "timestamp", "created_by")
+		fields = ("long_url", "short_code", "timestamp", "created_by", 'active')
 
 
 
