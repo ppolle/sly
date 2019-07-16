@@ -2,6 +2,7 @@ from django.test import TestCase, RequestFactory
 from django.core.urlresolvers import reverse
 from sly.apps.shrink.models import SlyUrl
 from django.contrib.auth.models import User
+from rest_framework.authtoken.models import Token
 from sly.apps.shrink.views import IndexView
 
 # Create your tests here.
@@ -109,8 +110,49 @@ class ShortCodeRedirectViewTests(TestCase):
 		self.assertTrue(response.status_code, 200)
 		self.assertContains(response, 'Kindly contact the Url owner for further details')
 
-class RegistrationViewTests(TestCase):
-	pass
+class RegistrationViewTests(CreateObjects, TestCase):
+	def test_user_creation_with_valid_arguments(self):
+		url = reverse('register')
+		data = {'first_name':'Test',
+				'last_name':'User',
+				'email':'test.user@gmail.com',
+				'password1':'testPASSWORD1234',
+				'password2':'testPASSWORD1234',
+				'username':'test_user'}
+		response = self.client.post(url, data, follow=True)
+
+		self.assertEqual(User.objects.all().count(), 1)
+		self.assertRedirects(response, reverse('dashboard', kwargs={'username':data['username']}))
+		self.assertContains(response, 'Succesfull Registration. Now take a tour of the Sly Dashboard.')
+
+	def test_user_creation_with_different_passwords(self):
+		url = reverse('register')
+		data = {'first_name':'Test',
+				'last_name':'User',
+				'email':'test.user@gmail.com',
+				'password1':'testPASSWORD1234',
+				'password2':'testPASSWORD123',
+				'username':'test_user'}
+		response = self.client.post(url, data, follow=True)
+
+		self.assertNotEqual(User.objects.all().count(), 1)
+		self.assertContains(response, "The two password fields didn&#39;t match")
+
+	def test_user_creation_with_already_existing_username(self):
+		user = self.create_user()
+
+		url = reverse('register')
+		data = {'first_name':'Test',
+		'last_name':'User',
+		'email':'test.user@gmail.com',
+		'password1':'testPASSWORD1234',
+		'password2':'testPASSWORD1234',
+		'username':'test_user'}
+
+		response = self.client.post(url, data, follow=True)
+
+		self.assertEqual(User.objects.all().count(), 1)
+		self.assertContains(response, "A user with that username already exists.")
 
 class AuthViewTests(CreateObjects, TestCase):
 	def test_authetication_with_correct_details(self):
@@ -144,14 +186,56 @@ class AuthViewTests(CreateObjects, TestCase):
 class ProfileViewTests(TestCase):
 	pass
 
-class RegenerateTokenViewTests(TestCase):
-	pass
+class RegenerateTokenViewTests(CreateObjects, TestCase):
+	def test_token_regeneratin(self):
+		'''
+		Test a token is regenerated
+		'''
+		user = self.create_user()
+		self.client.login(username=user.username, password='testPASSWORD1234')
+		url = reverse('regenerate-token')
+
+		response = self.client.get(url, follow=True)
+
+		self.assertRedirects(response, reverse('dashboard', kwargs={'username':user.username}))
+		self.assertContains(response, 'API Authentication key succesfully regenerated')
+		self.client.logout()
 
 class ShortUrlDetailViewTests(TestCase):
-	pass
+	def test_short_url_page_redirects(self):
+		short_url = SlyUrl.objects.create(long_url='https://www.google.com/',short_code='test')
+		url = reverse('shortcode_detail', kwargs={'shortcode':short_url.short_code})
+		response = self.client.get(url, follow=True)
+
+		self.assertEqual(response.status_code, 200)
+		self.assertContains(response, 'Your shortcode has been succesfully created as shown below')
 
 class DeleteShortCodeViewTests(TestCase):
-	pass
+	def test_short_code_delete(self):
+		short_url1 = SlyUrl.objects.create(long_url='https://www.google.com/')
+		short_url2 = SlyUrl.objects.create(long_url='https://www.facebook.com/')
+
+		url = reverse('shortcode_delete', kwargs={'shortcode':short_url1.short_code})
+		response = self.client.get(url, follow=True)
+
+		self.assertEqual(SlyUrl.objects.all().count(), 1)
+		self.assertContains(response, 'Shortcode succesfully deleted')
 
 class ChangeShortUrlStatusViewTests(TestCase):
-	pass
+	def test_change_url_status_to_inactive(self):
+		short_url1 = SlyUrl.objects.create(long_url='https://www.google.com/')
+		url = reverse('shortcode_change_status', kwargs={'shortcode':short_url1.short_code})
+		response = self.client.get(url, follow=True)
+
+		# self.assertEqual(short_url1.active, False)
+		self.assertRedirects(response, reverse('shortcode_detail', kwargs={'shortcode':short_url1.short_code}))
+		self.assertContains(response, 'ShortUrl status succesfully changed')
+
+	def test_change_url_status_to_active(self):
+		short_url1 = SlyUrl.objects.create(long_url='https://www.google.com/', active=False)
+		url = reverse('shortcode_change_status', kwargs={'shortcode':short_url1.short_code})
+		response = self.client.get(url, follow=True)
+
+		# self.assertEqual(short_url1.active, True)
+		self.assertRedirects(response, reverse('shortcode_detail', kwargs={'shortcode':short_url1.short_code}))
+		self.assertContains(response, 'ShortUrl status succesfully changed')
