@@ -1,8 +1,21 @@
 from django.test import TestCase
 from django.core.urlresolvers import reverse
 from sly.apps.shrink.models import SlyUrl
+from django.contrib.auth.models import User
 
 # Create your tests here.
+class CreateObjects:
+	def create_user(self):
+		'''
+		Create a user object and log it in
+		'''
+		user = User.objects.create_user(
+			username='test_user',
+			email='test.user@gmail.com',
+			password='testPASSWORD1234')
+
+		return user
+
 class IndexViewTests(TestCase):
 	def test_short_code_creation_with_both_fields_provided(self):
 		'''
@@ -71,3 +84,23 @@ class ShortCodeRedirectViewTests(TestCase):
 		self.assertTrue(response.status_code, 200)
 		self.assertContains(response, 'Kindly contact the Url owner for further details')
 
+class RegistrationViewTests(TestCase):
+	pass
+
+class AuthViewTests(TestCase):
+	pass
+
+class ProfileViewTests(TestCase):
+	pass
+
+class RegenerateTokenViewTests(TestCase):
+	pass
+
+class ShortUrlDetailViewTests(TestCase):
+	pass
+
+class DeleteShortCodeViewTests(TestCase):
+	pass
+
+class ChangeShortUrlStatusViewTests(TestCase):
+	pass
