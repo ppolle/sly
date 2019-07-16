@@ -1,7 +1,8 @@
-from django.test import TestCase
+from django.test import TestCase, RequestFactory
 from django.core.urlresolvers import reverse
 from sly.apps.shrink.models import SlyUrl
 from django.contrib.auth.models import User
+from sly.apps.shrink.views import IndexView
 
 # Create your tests here.
 class CreateObjects:
@@ -16,7 +17,7 @@ class CreateObjects:
 
 		return user
 
-class IndexViewTests(TestCase):
+class IndexViewTests(CreateObjects, TestCase):
 	def test_short_code_creation_with_both_fields_provided(self):
 		'''
 		Test a shortcode can be created with both fields
@@ -53,13 +54,37 @@ class IndexViewTests(TestCase):
 		'''
 		Test a logged in user can create a shortcode
 		'''
-		pass
+		user = self.create_user()
+		# self.client.login(username=user.username, password=user.password)
 
+		data = {'url':'http://www.celeryproject.org/docs-and-support/',
+		'short_code':'test'
+		}
+
+		url = reverse('index')
+		request = RequestFactory().post(url, data=data)
+		# request.user = user
+		response = IndexView.as_view(request)
+		# response = self.client.post(url, data, follow=True)
+		obj = SlyUrl.objects.get(short_code=data['short_code'])
+
+		self.assertEqual(obj.created_by, user)
+
+		self.client.logout()
+		
 	def test_unauthenticated_user_can_create_a_shortcode(self):
 		'''
 		Test unauthenticated users can create a shortcode
 		'''
-		pass
+		data = {'url':'http://www.celeryproject.org/docs-and-support/',
+		'short_code':'test'
+		}
+
+		url = reverse('index')
+		response = self.client.post(url, data, follow=True)
+		obj = SlyUrl.objects.get(short_code=data['short_code'])
+
+		self.assertEqual(obj.created_by, None)
 
 class ShortCodeRedirectViewTests(TestCase):
 	def test_redirection_passes_if_status_active(self):
@@ -87,8 +112,34 @@ class ShortCodeRedirectViewTests(TestCase):
 class RegistrationViewTests(TestCase):
 	pass
 
-class AuthViewTests(TestCase):
-	pass
+class AuthViewTests(CreateObjects, TestCase):
+	def test_authetication_with_correct_details(self):
+		'''
+		test user authetication
+		'''
+		user = self.create_user()
+		data = {'username':user.username,
+		'password1':'testPASSWORD1234'}
+
+		url = reverse('auth')
+		response = self.client.post(url, data, follow=True)
+
+		self.assertRedirects(response, reverse('dashboard', kwargs={'username':user.username}))
+		self.assertContains(response, 'Welcome back {}'.format(user.first_name.capitalize(), user.last_name.capitalize()))
+
+	def test_authentication_with_incorrect_password(self):
+		'''
+		Test user authentication with
+		'''
+		user = self.create_user()
+		data = {'username':user.username,
+				'password1':'blahblah'}
+
+		url = reverse('auth')
+		response= self.client.post(url, data, follow=True)
+
+		self.assertEqual(response.status_code, 200)
+		self.assertContains(response, 'Wrong username/password combination. Please try again.')
 
 class ProfileViewTests(TestCase):
 	pass

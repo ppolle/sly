@@ -45,7 +45,7 @@ class UserAuthForm(forms.Form):
 	
 	class Meta:
 		model = User
-		fields =('email', 'password1')
+		fields =('username', 'password1')
 	
 
 
