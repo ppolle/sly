@@ -48,4 +48,26 @@ class IndexViewTests(TestCase):
 		'''
 		pass
 
+class ShortCodeRedirectViewTests(TestCase):
+	def test_redirection_passes_if_status_active(self):
+		'''
+		Test succesful redirection if status is active
+		'''
+		obj = SlyUrl.objects.create(short_code='test',long_url='https://www.google.com/')
+		url = reverse('shorturl', kwargs={'shortcode':obj.short_code})
+		response = self.client.get(url)
+		
+		self.assertEqual(response.status_code, 302)
+		self.assertEqual(response['location'], obj.long_url)
+		
+	def test_redirection_fail_if_status_inactive(self):
+		'''
+		test unsuccesfull redirection if status is inactive
+		'''
+		obj = SlyUrl.objects.create(short_code='test',long_url='http://www.celeryproject.org/docs-and-support/',active=False)
+		url = reverse('shorturl', kwargs={'shortcode':obj.short_code})
+		response = self.client.get(url, follow=True)
+		
+		self.assertTrue(response.status_code, 200)
+		self.assertContains(response, 'Kindly contact the Url owner for further details')
 
