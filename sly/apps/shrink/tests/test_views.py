@@ -1,5 +1,5 @@
 from django.test import TestCase, RequestFactory
-from django.core.urlresolvers import reverse
+Ffrom django.core.urlresolvers import reverse
 from sly.apps.shrink.models import SlyUrl
 from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
