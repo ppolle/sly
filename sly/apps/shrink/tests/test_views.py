@@ -4,6 +4,7 @@ from sly.apps.shrink.models import SlyUrl
 from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 from sly.apps.shrink.views import IndexView
+from django.utils.http import urlencode
 
 # Create your tests here.
 class CreateObjects:
@@ -65,7 +66,7 @@ class IndexViewTests(CreateObjects, TestCase):
 		url = reverse('index')
 		request = RequestFactory().post(url, data=data)
 		# request.user = user
-		response = IndexView.as_view(request)
+		response = IndexView.as_view()
 		# response = self.client.post(url, data, follow=True)
 		obj = SlyUrl.objects.get(short_code=data['short_code'])
 
@@ -183,8 +184,29 @@ class AuthViewTests(CreateObjects, TestCase):
 		self.assertEqual(response.status_code, 200)
 		self.assertContains(response, 'Wrong username/password combination. Please try again.')
 
-class ProfileViewTests(TestCase):
-	pass
+class ProfileViewTests(CreateObjects, TestCase):
+	def test_denying_access_to_wrong_user(self):
+		user = self.create_user()
+		user1 = User.objects.create_user(
+			username='tester',
+			email='tester@gmail.com',
+			password='testPASSWORD1234'
+			)
+		self.client.login(username=user.username, password='testPASSWORD1234')
+
+		url = reverse('dashboard', kwargs={'username':user1.username})
+		response = self.client.get(url, follow=True)
+
+		self.assertRedirects(response, reverse('dashboard', kwargs={'username':user.username}))
+
+	def test_denying_access_to_unauthenticated_users(self):
+		user = self.create_user()
+
+		url = reverse('dashboard', kwargs={'username':user.username})
+		login_url = reverse('auth') + '?' + urlencode({'next': url})
+		response = self.client.get(login_url, follow=True)
+
+		self.assertRedirects(response, reverse('dashboard', kwargs={'username':user.username}), 302)
 
 class RegenerateTokenViewTests(CreateObjects, TestCase):
 	def test_token_regeneratin(self):
