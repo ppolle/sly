@@ -15,7 +15,7 @@ class ShortCodeList(generics.ListCreateAPIView):
 		return SlyUrl.objects.filter(created_by=user)
 
 	def perform_create(self, serializer):
-		serializer.save(created_by=self.request.user)
+		serializer.save(created_by=self.request.user, active=True)
 
 class ShortCodeDetail(generics.RetrieveUpdateDestroyAPIView):
 	"""
