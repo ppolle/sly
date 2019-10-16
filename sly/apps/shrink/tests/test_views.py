@@ -194,15 +194,16 @@ class ProfileViewTests(CreateObjects, TestCase):
 		response = self.client.get(url, follow=True)
 
 		self.assertRedirects(response, reverse('dashboard', kwargs={'username':user.username}))
+		self.client.logout()
 
 	def test_denying_access_to_unauthenticated_users(self):
 		user = self.create_user()
 
 		url = reverse('dashboard', kwargs={'username':user.username})
-		login_url = reverse('auth') + '?' + urlencode({'next': url})
-		response = self.client.get(login_url, follow=True)
+		login_url = '/auth/login/?next=/user/profile/test_user/'
+		response = self.client.get(url, follow=True)
 
-		self.assertRedirects(response, reverse('dashboard', kwargs={'username':user.username}), 302)
+		self.assertRedirects(response, login_url, 302)
 
 class RegenerateTokenViewTests(CreateObjects, TestCase):
 	def test_token_regeneratin(self):
