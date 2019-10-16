@@ -2,6 +2,7 @@ from django.test import TestCase
 from sly.apps.shrink.models import SlyUrl
 from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
+from rest_framework.test import APIClient
 
 # Create your tests here.
 
@@ -30,6 +31,7 @@ class ApiTests(TestCase):
 				short_code='test2',
 				created_by=self.user
 			)
+		self.client = APIClient()
 
 	def test_create_short_code_object(self):
 		url = '/api/v1/shortcode/'
@@ -80,30 +82,20 @@ class ApiTests(TestCase):
 		self.assertEqual(response.data['active'], True)
 
 	def test_edit_short_code_object(self):
-		# test_object = SlyUrl.objects.create(
-		# 		long_url='https://www.google.com/',
-		# 		short_code='test4',
-		# 		created_by=self.user
-		# 		)
-		# self.assertEqual(SlyUrl.objects.all().count(), 3)
+		test_object = SlyUrl.objects.create(
+				long_url='https://www.google.com/',
+				short_code='test4',
+				created_by=self.user
+				)
+		self.assertEqual(SlyUrl.objects.all().count(), 3)
 
-		# url = '/api/v1/shortcode/test2'
-		# data = {'active':False}
-		# response = self.client.put(url, data, HTTP_AUTHORIZATION='Token ' + str(self.token))
-		# print(response)
-
-		# self.assertEqual(response.status_code, 200)
-		# self.assertTrue(False in response.data['active'])
-		# self.assertTrue('test7' in response.data['short_code'])
-
-		token = Token.objects.get(user=self.user1)
-		url = '/api/v1/shortcode/test2'
-		
+		url = '/api/v1/shortcode/test4'
 		data = {'active':False}
-		response = self.client.put(url, data, HTTP_AUTHORIZATION='Token ' + str(self.token))
+		response = self.client.patch(url, data, HTTP_AUTHORIZATION='Token ' + str(self.token))
 
-		self.assertEqual(response.status_code, 403)
-		self.assertEqual(response.data['detail'], 'You do not have permission to perform this action.')
+		self.assertEqual(response.status_code, 200)
+		self.assertEqual(False, response.data['active'])
+		self.assertEqual('test4', response.data['short_code'])
 
 	def test_delete_short_code(self):
 		test_object = SlyUrl.objects.create(
