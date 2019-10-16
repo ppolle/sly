@@ -57,21 +57,17 @@ class IndexViewTests(CreateObjects, TestCase):
 		Test a logged in user can create a shortcode
 		'''
 		user = self.create_user()
-		# self.client.login(username=user.username, password=user.password)
+		self.client.login(username='test_user', password='testPASSWORD1234')
 
 		data = {'url':'http://www.celeryproject.org/docs-and-support/',
 		'short_code':'test'
 		}
 
 		url = reverse('index')
-		request = RequestFactory().post(url, data=data)
-		# request.user = user
-		response = IndexView.as_view()
-		# response = self.client.post(url, data, follow=True)
+		response = self.client.post(url, data, follow=True)
 		obj = SlyUrl.objects.get(short_code=data['short_code'])
 
 		self.assertEqual(obj.created_by, user)
-
 		self.client.logout()
 		
 	def test_unauthenticated_user_can_create_a_shortcode(self):
