@@ -8,12 +8,8 @@ class UrlFormTests(TestCase):
 		'url': 'https://www.nation.co.ke/lifestyle/1190-1190-5p56avz/index.html',
 		'short_code':'weifbwie'
 		}
-
 		form = UrlForm(data=data)
-		if form.errors.items():
-			field, error = form.errors.items()[0]
-			self.assertEqual(field, error)
-
+	
 		self.assertTrue(form.is_valid())
 
 	def test_form_valid_without_short_code_field(self):
@@ -28,7 +24,6 @@ class UrlFormTests(TestCase):
 		data = {
 		'short_code':'test'
 		}
-
 		form = UrlForm(data=data)
 		if form.errors.items():
 			field, error = form.errors.items()[0]
@@ -40,7 +35,6 @@ class UrlFormTests(TestCase):
 		data = {
 		'url':'abc'
 		}
-
 		form = UrlForm(data=data)
 		if form.errors.items():
 			field , error = form.errors.items()[0]
@@ -52,7 +46,6 @@ class UrlFormTests(TestCase):
 		data = {
 		'url':'http://localhost:8000/'
 		}
-
 		form = UrlForm(data=data)
 		if form.errors.items():
 			field, error = form.errors.items()[0]
