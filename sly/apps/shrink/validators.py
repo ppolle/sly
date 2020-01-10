@@ -15,7 +15,7 @@ def validate_url(value):
 	return value
 
 def omit_own_domain(value):
-	current_site = Site.objects.get_current().lower().strip()
+	current_site = Site.objects.get_current()
 	incoming_site = extract_domain(value).lower().strip()
 
 	if current_site is not incoming_site:

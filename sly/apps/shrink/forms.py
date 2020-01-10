@@ -1,14 +1,14 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from .validators import validate_url
+from .validators import validate_url, omit_own_domain
 
 
 class UrlForm(forms.Form):
 	'''
 	Form to shorten a new url
 	'''
-	url = forms.CharField(label='Shorten Url', max_length=300, required=True, validators=[validate_url],
+	url = forms.CharField(label='Shorten Url', max_length=300, required=True, validators=[validate_url,omit_own_domain],
                           widget=forms.TextInput(attrs={'autofocus': 'autofocus', 'class': 'form-control'}))
 	short_code = forms.CharField(label='Custom Short Url', max_length=300, required=False, widget=forms.TextInput(
         attrs={'autofocus': 'autofocus', 'class': 'form-control'}))
