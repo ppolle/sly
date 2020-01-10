@@ -1,7 +1,7 @@
 from sly.apps.shrink.models import SlyUrl
 from rest_framework import serializers
 from sly.apps.shrink.views import IndexView
-from sly.apps.shrink.validators import validate_url
+from sly.apps.shrink.validators import validate_url, omit_own_domain
 
 class SlyUrlSerializer(serializers.ModelSerializer):
 
@@ -12,7 +12,7 @@ class SlyUrlSerializer(serializers.ModelSerializer):
 
 	long_url = serializers.URLField(
 		required=True,
-		validators=[validate_url])
+		validators=[validate_url, omit_own_domain])
 
 	created_by = serializers.ReadOnlyField(source='created_by.username')
 

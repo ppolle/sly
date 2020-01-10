@@ -21,9 +21,6 @@ class UrlFormTests(TestCase):
 		'url':'https://www.nation.co.ke/lifestyle/1190-1190-5p56avz/index.html'
 		}
 		form = UrlForm(data=data)
-		if form.errors.items():
-			field, error = form.errors.items()[0]
-			self.assertEqual(field, error)
 
 		self.assertTrue(form.is_valid())
 
@@ -50,6 +47,18 @@ class UrlFormTests(TestCase):
 			self.assertEqual(error[0], "This field has to be a proper URL")
 
 		self.assertFalse(form.is_valid())
+
+	def test_ommit_own_url(self):
+		data = {
+		'url':'http://localhost:8000/'
+		}
+
+		form = UrlForm(data=data)
+		if form.errors.items():
+			field, error = form.errors.items()[0]
+			self.assertEqual(error[0], "You cannot shorten a URL from this site")
+
+		self.assertFalse(form.is_valid)
 
 class UserAuthFormTests(TestCase):
 	def test_valid_form(self):
