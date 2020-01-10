@@ -93,7 +93,6 @@ class IndexViewTests(CreateObjects, TestCase):
 		response = self.client.post(url,data, follow=True)
 
 		self.assertContains(response, 'This field has to be a proper URL')
-		self.assertRedirects(response, reverse('index'))
 
 class ShortCodeRedirectViewTests(TestCase):
 	def test_redirection_passes_if_status_active(self):

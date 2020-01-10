@@ -39,6 +39,18 @@ class UrlFormTests(TestCase):
 
 		self.assertFalse(form.is_valid())
 
+	def test_invalid_url(self):
+		data = {
+		'url':'abc'
+		}
+
+		form = UrlForm(data=data)
+		if form.errors.items():
+			field , error = form.errors.items()[0]
+			self.assertEqual(error[0], "This field has to be a proper URL")
+
+		self.assertFalse(form.is_valid())
+
 class UserAuthFormTests(TestCase):
 	def test_valid_form(self):
 		data = {
