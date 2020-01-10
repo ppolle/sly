@@ -84,6 +84,17 @@ class IndexViewTests(CreateObjects, TestCase):
 
 		self.assertEqual(obj.created_by, None)
 
+	def test_invalid_url_raises_validation_error(self):
+		'''
+		Test an invalid url raises a validation error
+		'''
+		data = {'url':'blah blah'}
+		url = reverse('index')
+		response = self.client.post(url,data, follow=True)
+
+		self.assertContains(response, 'This field has to be a proper URL')
+		self.assertRedirects(response, reverse('index'))
+
 class ShortCodeRedirectViewTests(TestCase):
 	def test_redirection_passes_if_status_active(self):
 		'''
