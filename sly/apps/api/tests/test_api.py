@@ -177,3 +177,14 @@ class ApiTests(TestCase):
 
 		self.assertEqual(response2.status_code, 403)
 		self.assertEqual(response2.data['detail'], 'You do not have permission to perform this action.')
+
+	def test_omit_own_domain(self):
+		url = '/api/v1/shortcode/'
+		data = {'long_url':'http://example.com',
+				'short_code':'test4'}
+		response = self.client.post(url, data, HTTP_AUTHORIZATION='Token ' + str(self.token))
+
+		self.assertEqual(response.status_code, 400)
+		self.assertEqual(SlyUrl.objects.all().count(), 2)
+		self.assertEqual(response.data['long_url'][0], "You cannot shorten a URL from this site")
+

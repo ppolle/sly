@@ -98,11 +98,11 @@ class IndexViewTests(CreateObjects, TestCase):
 		'''
 		Test a url from sly cannot be shortened
 		'''
-		data = {'url':'http://localhost:8000/'}
+		data = {'url':'http://example.com'}
 		url = reverse('index')
 		response = self.client.post(url, data, follow=True)
 
-		self.assertContains(response, 'This field has to be a proper URL')
+		self.assertContains(response, 'You cannot shorten a URL from this site')
 
 
 class ShortCodeRedirectViewTests(TestCase):

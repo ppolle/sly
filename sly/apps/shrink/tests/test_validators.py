@@ -10,8 +10,8 @@ class ValidateUrlTests(TestCase):
 	def test_extract_domain(self):
 		url = 'https://www.youtube.com/watch?v=Btbvv9kfLqo'
 		uri = extract_domain(url)
-		self.assertEqual(uri, 'www.youtube.com')
+		self.assertEqual(uri, 'youtube.com')
 
 	def test_omit_own_domain(self):
-		url = 'http://localhost:8000/'
+		url = 'http://example.com'
 		self.assertRaises(ValidationError, omit_own_domain, url)
