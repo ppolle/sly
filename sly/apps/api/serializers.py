@@ -12,7 +12,7 @@ class SlyUrlSerializer(serializers.ModelSerializer):
 
 	long_url = serializers.URLField(
 		required=True,
-		validators=[validate_url])
+		validators=[validate_url, omit_own_domain])
 
 	created_by = serializers.ReadOnlyField(source='created_by.username')
 

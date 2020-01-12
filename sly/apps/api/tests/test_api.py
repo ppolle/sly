@@ -180,7 +180,7 @@ class ApiTests(TestCase):
 
 	def test_omit_own_domain(self):
 		url = '/api/v1/shortcode/'
-		data = {'long_url':'example.com',
+		data = {'long_url':'http://example.com',
 				'short_code':'test4'}
 		response = self.client.post(url, data, HTTP_AUTHORIZATION='Token ' + str(self.token))
 

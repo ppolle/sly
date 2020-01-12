@@ -8,7 +8,7 @@ class UrlForm(forms.Form):
 	'''
 	Form to shorten a new url
 	'''
-	url = forms.CharField(label='Shorten Url', max_length=300, required=True, validators=[validate_url],
+	url = forms.CharField(label='Shorten Url', max_length=300, required=True, validators=[validate_url, omit_own_domain],
                           widget=forms.TextInput(attrs={'autofocus': 'autofocus', 'class': 'form-control'}))
 	short_code = forms.CharField(label='Custom Short Url', max_length=300, required=False, widget=forms.TextInput(
         attrs={'autofocus': 'autofocus', 'class': 'form-control'}))
