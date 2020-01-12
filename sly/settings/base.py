@@ -21,6 +21,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
+    'django.contrib.sites',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
@@ -146,3 +147,6 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 LOGIN_URL = '/auth/login/'
+
+# Sites framework
+SITE_ID = 1

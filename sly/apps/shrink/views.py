@@ -20,8 +20,6 @@ class IndexView(View):
 		Handle inedx page post requests
 		'''
 		form = UrlForm(request.POST)
-		template = 'shrink/home/index.html'
-		context = {'form':form}
 
 		if form.is_valid():
 			long_url = form.cleaned_data['url']
@@ -32,8 +30,10 @@ class IndexView(View):
 			else:
 				obj = SlyUrl.objects.create(long_url = long_url, short_code=short_code)
 
-		messages.success(request, 'ShortUrl creation was a success')			
-		return redirect('shortcode_detail', shortcode=obj.short_code)
+			messages.success(request, 'ShortUrl creation was a success')			
+			return redirect('shortcode_detail', shortcode=obj.short_code)
+
+		return render(request, 'shrink/home/index.html', {'form':form})
 
 class ShortCodeRedirectView(View):
 	def get(self, request, shortcode, *args, **kwargs):
