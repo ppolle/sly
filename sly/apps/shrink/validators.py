@@ -33,5 +33,5 @@ def url_exists(value):
 	if SlyUrl.objects.filter(short_code=value).exists():
 		raise ValidationError("A short url with that shortcode already exists, please try another code")
 
-	return short_url_code
+	return value
 

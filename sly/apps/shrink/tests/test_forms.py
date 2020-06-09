@@ -26,8 +26,8 @@ class UrlFormTests(TestCase):
 		}
 		form = UrlForm(data=data)
 		if form.errors.items():
-			field, error = form.errors.items()[0]
-			self.assertTrue(field, error)
+			error = dict(form.errors.items())
+			self.assertTrue(error.keys(), error.values())
 
 		self.assertFalse(form.is_valid())
 
@@ -37,8 +37,8 @@ class UrlFormTests(TestCase):
 		}
 		form = UrlForm(data=data)
 		if form.errors.items():
-			field , error = form.errors.items()[0]
-			self.assertEqual(error[0], "This field has to be a proper URL")
+			error = dict(form.errors.items())
+			self.assertEqual(error['url'][0], "This field has to be a proper URL")
 
 		self.assertFalse(form.is_valid())
 
@@ -48,10 +48,23 @@ class UrlFormTests(TestCase):
 		}
 		form = UrlForm(data=data)
 		if form.errors.items():
-			field, error = form.errors.items()[0]
-			self.assertEqual(error[0], "You cannot shorten a URL from this site")
+			error = dict(form.errors.items())
+			self.assertEqual(error['url'][0], "You cannot shorten a URL from this site")
 
 		self.assertFalse(form.is_valid())
+
+	def test_a_short_code_cant_be_used_twice(self):
+		data = {
+		'url': 'https://www.nation.co.ke/lifestyle/1190-1190-5p56avz/index.html',
+		'short_code':'weifbwie'
+		}
+
+		form = UrlForm(data=data)
+		if form.errors.items():
+			error = dict(form.errors.items)
+			self.assertTrue(error['short_code'][0], "A short url with that shortcode already exists, please try another code")
+		self.assertTrue(form.is_valid())
+
 
 class UserAuthFormTests(TestCase):
 	def test_valid_form(self):
@@ -71,8 +84,8 @@ class UserAuthFormTests(TestCase):
 		'username':'ppolle'}
 		form = UserAuthForm(data=data)
 		if form.errors.items():
-			field, error = form.errors.items()[0]
-			self.assertTrue(field, error)
+			error = dict(form.errors.items())
+			self.assertTrue(error.keys(), error.values())
 		self.assertFalse(form.is_valid())
 
 class RegisterUserFormTests(TestCase):
@@ -104,15 +117,15 @@ class RegisterUserFormTests(TestCase):
 	def test_password1_must_be_equal_to_password2(self):
 		data = {'first_name':'Peter',
 		'last_name':'Polle',
-		'email':'peter@polle@gmail.com',
+		'email':'peterpolle@gmail.com',
 		'password1':'iamTHEBIGBOSS1234',
 		'password2':'iamTHEBIGBOSS123',
 		'username':'ppolle'
 		}
 		form = RegisterUserForm(data=data)
 		if form.errors.items():
-			field, error = form.errors.items()[0]
-			self.assertEqual(error[0], "The two password fields didn't match.")
+			error = dict(form.errors.items())
+			self.assertEqual(error['password2'][0], "The two password fields didn't match.")
 
 		self.assertFalse(form.is_valid())
 
