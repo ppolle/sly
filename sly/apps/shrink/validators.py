@@ -15,7 +15,7 @@ def validate_url(value):
 	return value
 
 def omit_own_domain(value):
-	current_site = unicode(Site.objects.get_current())
+	current_site = str(Site.objects.get_current())
 	incoming_site = extract_domain(value).lower().strip()
 
 	if current_site != incoming_site:
@@ -25,7 +25,5 @@ def omit_own_domain(value):
 
 def extract_domain(value):
 	import tldextract
-	from urlparse import urlparse
-
 	uri = tldextract.extract(value).registered_domain
 	return uri

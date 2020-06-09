@@ -3,7 +3,7 @@ def generate_shortcode(id):
 	Generate urls shortcode
 	'''
 	import string
-	characters = string.digits+string.uppercase+string.lowercase
+	characters = string.digits+string.ascii_uppercase+string.ascii_lowercase
 	base = len(characters)
 	ret = []
 
