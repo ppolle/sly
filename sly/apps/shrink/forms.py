@@ -1,8 +1,7 @@
 from django import forms
-from .models import SlyUrl
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from .validators import validate_url, omit_own_domain
+from .validators import validate_url, omit_own_domain, url_exists
 
 
 class UrlForm(forms.Form):
@@ -11,17 +10,8 @@ class UrlForm(forms.Form):
 	'''
 	url = forms.CharField(label='Shorten Url', max_length=300, required=True, validators=[validate_url, omit_own_domain],
                           widget=forms.TextInput(attrs={'autofocus': 'autofocus', 'class': 'form-control'}))
-	short_code = forms.CharField(label='Custom Short Url', max_length=300, required=False, widget=forms.TextInput(
+	short_code = forms.CharField(label='Custom Short Url', max_length=300, required=False, validators=[url_exists], widget=forms.TextInput(
         attrs={'autofocus': 'autofocus', 'class': 'form-control'}))
-
-	def clean_short_code(self):
-		short_url_code = self.cleaned_data['short_code']
-
-		if SlyUrl.objects.filter(short_code=short_url_code).exists():
-			print('Test: {}'.format(short_url_code))
-			raise forms.ValidationError("A short url with that shortcode already exists, please try another code")
-
-		return short_url_code
 
 class RegisterUserForm(UserCreationForm):
 	'''
