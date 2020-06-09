@@ -104,6 +104,18 @@ class IndexViewTests(CreateObjects, TestCase):
 
 		self.assertContains(response, 'You cannot shorten a URL from this site')
 
+	def test_using_short_code_that_exists_raises_validation_error(self):
+		'''
+		Test creating a short url with a shortcode that already exists raises a validation error
+		'''
+		obj = SlyUrl.objects.create(long_url='http://facebook.com', short_code='test')
+		data = {'url':'http://nation.co.ke',
+		'short_code':'test'}
+		url = reverse('index')
+		response = self.client.post(url, data, follow=True)
+
+		self.assertContains(response, 'A short url with that shortcode already exists, please try another code')
+
 
 class ShortCodeRedirectViewTests(TestCase):
 	def test_redirection_passes_if_status_active(self):
