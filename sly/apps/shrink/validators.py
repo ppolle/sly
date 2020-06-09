@@ -1,6 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.core.validators import URLValidator
 from django.contrib.sites.models import Site
+from .models import SlyUrl
 
 def validate_url(value):
 	'''
@@ -27,3 +28,10 @@ def extract_domain(value):
 	import tldextract
 	uri = tldextract.extract(value).registered_domain
 	return uri
+
+def url_exists(value):
+	if SlyUrl.objects.filter(short_code=value).exists():
+		raise ValidationError("A short url with that shortcode already exists, please try another code")
+
+	return value
+
