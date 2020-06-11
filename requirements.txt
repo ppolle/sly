@@ -2,7 +2,7 @@ Django==1.11.22
 django-bootstrap3==11.0.0
 django-filter==2.0.0
 django-fullurl==1.0
-djangorestframework==3.3.2
+djangorestframework==3.9.1
 psycopg2-binary==2.8.5
 tldextract==2.2.2
 python-decouple==3.1
