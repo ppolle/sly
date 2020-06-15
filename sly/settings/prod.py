@@ -10,7 +10,10 @@ ALLOWED_HOSTS = ['*']
 SECRET_KEY = config('SECRET_KEY')
 
 DATABASES = {
-    'default': dj_database_url.config(
-        default=config('DATABASE_URL')
-    )
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': config('DB_NAME'),
+        'USER': config('DB_USER'),
+        'PASSWORD':config('DB_PASS'),
+    }
 }
